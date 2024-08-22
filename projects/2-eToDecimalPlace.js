@@ -3,7 +3,7 @@ let e = "2.718281828459045235360287471352662497757247093699959574966967627724076
 
 let digitNumber = Math.floor(Math.random() * 100);
 
-let digitOfE = e.charAt(digitNumber);
+let eToDigit = e.slice(0, digitNumber);
 
-console.log(digitNumber);
-console.log(digitOfE);
+console.log(digitNumber)
+console.log(eToDigit);
