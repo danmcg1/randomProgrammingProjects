@@ -13,3 +13,9 @@ def piToDigit(i):
     print(round(pi,i))
 
 piToDigit(i)
+
+def printSomethingToScreen():
+    """Returns something to be visible on screen"""
+    print("Welcome to nvim")
+
+printSomethingToScreen()

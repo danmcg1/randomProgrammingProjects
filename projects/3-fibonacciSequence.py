@@ -9,17 +9,16 @@ position = int(input("What position do you want?: "))
 numbers = [0,1]
 
 def fibonacci(position):
-    """Finding the fibonacci number at a specific position"""
-    if position == 0: 
+    """Appending to the array instead of replacing it"""
+    if position == 0:
         print(0)
     elif position == 1:
         print(1)
     else:
         for i in range(position):
-            new_number= numbers[0]+numbers[1]
-            numbers[0] = numbers[1]
-            numbers[1] = new_number
-        print(numbers[1])
+            new_number= numbers[i]+numbers[i+1]
+            numbers.append(new_number)
+            print(numbers[i])
 
 fibonacci(position)
 
