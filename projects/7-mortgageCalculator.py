@@ -30,8 +30,9 @@ def calculate_interest_in_period():
         interest_in_period = (interest_rate_percentage / 365) * float(gross_remaining)
     return(interest_in_period)
 
-for i in mortgage_term:
-    new_balance = gross_remaining + interest_in_period - payments
+for i in range(1,mortgage_term):
+    new_balance = gross_remaining + calculate_interest_in_period() - payments
+    return(new_balance)
     #if new_balance == 0:
      #   break
 
