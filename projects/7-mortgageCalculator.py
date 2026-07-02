@@ -6,7 +6,7 @@
 mortgage_term = 25
 interest_rate = 4.5
 interest_rate_percentage = interest_rate / 100
-mortgage_initial = 240000
+principle = 240000
 
 interest_interval = "daily" 
     #["yearly","monthly","weekly","daily"]
@@ -15,27 +15,40 @@ interest_interval = "daily"
     # Weekly = 52
     # Daily = 365
 
-gross_remaining = mortgage_initial
-payments = int(input("What are the monthly payments?: "))
+initial_balance = principle
 
-
-def calculate_interest_in_period():
+def interest_rate_in_period():
     if interest_interval == "yearly":
-        interest_in_period = interest_rate_percentage * float(gross_remaining)
+        interest_in_period = interest_rate_percentage 
     elif interest_interval == "monthly":
-        interest_in_period = (interest_rate_percentage / 12) * float(gross_remaining)
+        interest_in_period = (interest_rate_percentage / 12) 
     elif interest_interval == "weekly":
-        interest_in_period = (interest_rate_percentage / 52) * float(gross_remaining)
+        interest_in_period = (interest_rate_percentage / 52) 
     elif interest_interval == "daily":
-        interest_in_period = (interest_rate_percentage / 365) * float(gross_remaining)
+        interest_in_period = (interest_rate_percentage / 365) 
     return(interest_in_period)
 
-for i in range(1,mortgage_term):
-    new_balance = gross_remaining + calculate_interest_in_period() - payments
-    return(new_balance)
-    #if new_balance == 0:
-     #   break
+def number_of_periods():
+    if interest_interval == "yearly":
+        n = mortgage_term 
+    elif interest_interval == "monthly":
+        n = mortgage_term * 12
+    elif interest_interval == "weekly":
+        n = mortgage_term  * 52
+    elif interest_interval == "daily":
+        n = mortgage_term  * 365
+    return(n)
 
+r = interest_rate_in_period()
+n = number_of_periods()
 
-print("Interest in period = £" + str(calculate_interest_in_period()))
-print(new_balance)
+periodic_payment = principle * ((r * pow(1 + r, n)) / (pow(1 + r, n) - 1))
+interest_over_period = principle * r
+principle_paid_over_period = principle - interest_over_period
+new_balance_principle = principle - principle_paid_over_period
+
+print(periodic_payment)
+print(interest_over_period)
+print(principle_paid_over_period)
+print(new_balance_principle)
+
