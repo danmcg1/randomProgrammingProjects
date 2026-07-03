@@ -3,19 +3,13 @@
 # For added complexity, add an option for users to select the compounding interval (Monthly, Weekly, Daily, Continually).
 
 # mortgage_term = int(input("What is the mortgage term?: "))
-mortgage_term = 25
+mortgage_term = 28
 interest_rate = 4.5
 interest_rate_percentage = interest_rate / 100
 principle = 240000
 
-interest_interval = "daily" 
-    #["yearly","monthly","weekly","daily"]
-    # Yearly = 1
-    # Monthly = 12
-    # Weekly = 52
-    # Daily = 365
-
-initial_balance = principle
+interest_interval = "monthly" 
+#["yearly","monthly","weekly","daily"]
 
 def interest_rate_in_period():
     if interest_interval == "yearly":
@@ -42,13 +36,20 @@ def number_of_periods():
 r = interest_rate_in_period()
 n = number_of_periods()
 
-periodic_payment = principle * ((r * pow(1 + r, n)) / (pow(1 + r, n) - 1))
-interest_over_period = principle * r
-principle_paid_over_period = principle - interest_over_period
-new_balance_principle = principle - principle_paid_over_period
+current_balance = principle
 
-print(periodic_payment)
-print(interest_over_period)
-print(principle_paid_over_period)
-print(new_balance_principle)
+periodic_payment = principle * ((r * pow(1 + r, n)) / (pow(1 + r, n) - 1))
+
+
+
+for period in range(1, n + 1):
+    interest_over_period = current_balance * r
+    principle_paid_over_period = periodic_payment - interest_over_period
+    ending_balance = current_balance - principle_paid_over_period
+
+    print(f"Month {period}: Start: £{current_balance:.2f} | Interest: £{interest_over_period:.2f} | End: £{ending_balance:.2f}")
+    
+    current_balance = ending_balance
+
+
 
