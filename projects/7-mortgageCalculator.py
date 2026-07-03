@@ -36,18 +36,25 @@ def number_of_periods():
 r = interest_rate_in_period()
 n = number_of_periods()
 
+history = []
 current_balance = principle
 
 periodic_payment = principle * ((r * pow(1 + r, n)) / (pow(1 + r, n) - 1))
-
-
 
 for period in range(1, n + 1):
     interest_over_period = current_balance * r
     principle_paid_over_period = periodic_payment - interest_over_period
     ending_balance = current_balance - principle_paid_over_period
 
-    print(f"Month {period}: Start: £{current_balance:.2f} | Interest: £{interest_over_period:.2f} | End: £{ending_balance:.2f}")
+    history.append({
+        "period": period,
+        "starting_balance": current_balance,
+        "interest": interest_over_period,
+        "principal_paid": principle_paid_over_period,
+        "ending_balance": ending_balance
+    })
+
+    print(f"Period {period}: Start: £{current_balance:.2f} | Interest: £{interest_over_period:.2f} | End: £{ending_balance:.2f}")
     
     current_balance = ending_balance
 
