@@ -72,13 +72,31 @@ def interest_over_period(mortgage_dict, r):
 
 #### ------------------------------- Performing calculations --------------------------------
 
+### -------------------------------- One time calculations ---------------------------------
 for mortgage in my_mortgages:
     mortgage["current_balance"] = starting_balance(mortgage)
+    r = interest_rate_in_period(mortgage)
 
-for mortgage in my_mortgages:
-    for period in range(1, int(n + 1)):
+    
+    combined_total_owed = 0
+    combined_periodic_payment = 0.0
 
-        r = interest_rate_in_period(mortgage)
+    for mortgage in my_mortgages:
+        mortgage["current_balance"] = starting_balance(mortgage)
+
+combined_total_owed = sum(m["principle"] for m in my_mortgages)
+combined_periodic_payment = sum(periodic_payment(m, interest_rate_in_period(m), n) for m in my_mortgages)
+
+print(f"Initial Total Owed: £{combined_total_owed:.2f} | Bill for period: £{combined_periodic_payment}")
+
+### ------------------------------- Calculations for each period -----------------------------------
+for period in range(1, int(n + 1)):
+    
+    combined_interest_this_period = 0.0
+    combined_principle_paid_this_period = 0.0
+    combined_remaining_balance = 0.0
+
+    for mortgage in my_mortgages:
 
         start_value = mortgage["current_balance"]
 
@@ -87,18 +105,13 @@ for mortgage in my_mortgages:
         principle_paid_this_period = periodic_payment(mortgage, r, n) - interest_over_period(mortgage, r)
 
         mortgage["current_balance"] = mortgage["current_balance"] - principle_paid_this_period
-
-        historic_payments.append({
-            "period": period,
-            "starting_balance": start_value,
-            "interest": interest_this_period,
-            "principal_paid": principle_paid_this_period,
-            "ending_balance": mortgage["current_balance"]
-        })
-
-        print(f"Period {period}: Start: £{starting_balance(mortgage):.2f} | Interest: £{interest_this_period:.2f} | End: £{mortgage["current_balance"]:.2f}")
         
+        combined_interest_this_period += interest_this_period
+        combined_principle_paid_this_period += principle_paid_this_period
+        combined_remaining_balance += mortgage["current_balance"]
+
         start_value = mortgage["current_balance"]
 
+    print(f"Period {period} | Remaining Owed: £{combined_remaining_balance:.2f} | Combined Interest: £{combined_interest_this_period:.2f} | ")
 
 
