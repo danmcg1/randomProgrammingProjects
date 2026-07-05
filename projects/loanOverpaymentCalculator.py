@@ -12,7 +12,7 @@ loan_1 = {
 overpayments = 100
 
 #["yearly","monthly","weekly","daily"]
-interest_interval = "yearly" 
+interest_interval = "monthly" 
 
 ### ------------------------------ Setuo functions -----------------------------
 def interest_rate_percentage_conversion(loan_dict):
@@ -60,6 +60,12 @@ for loan in loans:
         interest_over_period = current_balance * r
         principle_paid_over_period = periodic_payment + overpayments - interest_over_period
         ending_balance = current_balance - principle_paid_over_period
+
+        historic_payments.append({
+            "current_balance": current_balance,
+            "interest_in_period": interest_over_period,
+            "current_balance": current_balance,
+        })
 
         print(f"Month {period}: Start: £{current_balance:.2f} | Interest: £{interest_over_period:.2f} | End: £{ending_balance:.2f}")
         
