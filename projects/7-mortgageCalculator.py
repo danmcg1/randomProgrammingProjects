@@ -52,6 +52,8 @@ def number_of_periods():
 
 n = number_of_periods()
 
+payment_details = []
+
 ### -------------------------- Calculation Functions -------------------------------
 
 def starting_balance(mortgage_dict):
@@ -101,4 +103,15 @@ for period in range(1, int(n + 1)):
         combined_principle_paid_this_period += principle_paid_this_period
         combined_remaining_balance += mortgage["current_balance"]
 
+        payment_details.append({
+            "period": period,
+            "interest_this_period": interest_this_period,
+            "principle_paid_this_period": principle_paid_this_period,
+            "remaining_balance": mortgage["current_balance"],
+        })
+
     print(f"Period {period:3d} | Remaining Owed: £{combined_remaining_balance:10.2f} | Combined Interest: £{combined_interest_this_period:7.2f} |")
+
+
+
+

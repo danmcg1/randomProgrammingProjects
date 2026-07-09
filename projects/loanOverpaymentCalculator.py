@@ -21,25 +21,25 @@ def interest_rate_percentage_conversion(loan_dict):
 
 def interest_rate_in_period(loan_dict):
     if interest_interval == "yearly":
-        interest_in_period = interest_rate_percentage_conversion(loan_dict) 
+        return interest_rate_percentage_conversion(loan_dict) 
     elif interest_interval == "monthly":
-        interest_in_period = (interest_rate_percentage_conversion(loan_dict) / 12) 
+        return (interest_rate_percentage_conversion(loan_dict) / 12) 
     elif interest_interval == "weekly":
-        interest_in_period = (interest_rate_percentage_conversion(loan_dict) / 52) 
+        return (interest_rate_percentage_conversion(loan_dict) / 52) 
     elif interest_interval == "daily":
-        interest_in_period = (interest_rate_percentage_conversion(loan_dict) / 365) 
-    return(interest_in_period)
+        return (interest_rate_percentage_conversion(loan_dict) / 365) 
+    return(0)
 
 def number_of_periods(loan_dict):
     if interest_interval == "yearly":
         n = loan_dict["loan_term"] 
     elif interest_interval == "monthly":
-        n = loan_dict["loan_term"] * 12
+        n =  loan_dict["loan_term"] * 12
     elif interest_interval == "weekly":
-        n = loan_dict["loan_term"]  * 52
+        n =  loan_dict["loan_term"]  * 52
     elif interest_interval == "daily":
-        n = loan_dict["loan_term"]  * 365
-    return(n)
+        n =  loan_dict["loan_term"]  * 365
+    return(0)
 
 historic_payments = []
 
@@ -51,12 +51,11 @@ for loan in loans:
     n = number_of_periods(loan)
     current_balance = loan_1["principle"]
     periodic_payment = loan_1["principle"] * ((r * pow(1 + r, n)) / (pow(1 + r, n) - 1))
-    print(f"Total Owed: £{loan["principle"]:.2f} | Bill for period: £{periodic_payment}")
+    print(f"Total Owed: £{loan["principle"]:.2f}| {interest_interval} overpayment: £{overpayments:.2f} | Bill for period: £{periodic_payment}")
 
     period = 1
     while current_balance > 0:
 
-    #for period in range(1, n + 1):
         interest_over_period = current_balance * r
         principle_paid_over_period = periodic_payment + overpayments - interest_over_period
         ending_balance = current_balance - principle_paid_over_period
