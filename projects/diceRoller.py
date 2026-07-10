@@ -46,7 +46,15 @@ def sanatised_results(results):
         clean_results += ", " + str(i)
     return(clean_results)
 
+def disadvantage_rolls(results):
+    return(min(results))
+
+def advantage_rolls(results):
+    return(max(results))
+
 rolling_animation()
 print(f"\r{sanatised_results(results)}\n")
-if number_of_dice > 1:
+if number_of_dice == 2 and sides == 20:
+    print(f"\nAdvantage: {advantage_rolls(results)} \nDisadvantage: {disadvantage_rolls(results)}")
+elif number_of_dice > 1:
     print(f"\rd{sides} total = {sum(results)}")
