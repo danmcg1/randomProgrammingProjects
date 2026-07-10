@@ -6,13 +6,16 @@ import random
 import sys
 import time
 
-print("\nChoose your dice:")
-sides = int(input("d4 | d6 | d8 | d10 | d12 | d20 | d100 |  d")or 20)
-print(f"\nDice selected: d{sides}")
+all_dice = []
+results = []
+
+def dice_to_be_rolled():
+    print("\nChoose your dice: Default = d20")
+    sides = int(input("d4 | d6 | d8 | d10 | d12 | d20 | d100 |  d")or 20)
+    print(f"\nDice selected: d{sides}")
+    all_dice.append(sides)
 
 number_of_dice = int(input("How many dice do you want to roll? ").strip() or 1)
-
-results = []
 
 def roll_dice(sides):
     return(random.randint(1,sides))
@@ -23,7 +26,7 @@ def dice_roller(number_of_dice, sides):
         results.append(roll)
         number_of_dice -= 1
     
-dice_roller(number_of_dice, sides)
+dice_roller(number_of_dice, all_dice)
 
 def rolling_animation():
     start_time = time.time()
@@ -51,8 +54,6 @@ def disadvantage_rolls(results):
 
 def advantage_rolls(results):
     return(max(results))
-
-#results = [20]
 
 rolling_animation()
 print(f"\rd{sides} results: {results}\n")
