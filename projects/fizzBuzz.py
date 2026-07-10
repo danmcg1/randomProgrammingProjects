@@ -8,13 +8,12 @@ def isMultipleOf3(n):
 def isMultipleOf5(n):
     return (n % 5 == 0)
 
-for i in range(1, 100):
+for i in range(1, 101):
     if isMultipleOf3(i) & isMultipleOf5(i):
-        print(str(i) + "FizzBuzz")
+        print("\rFizzBuzz")
     elif isMultipleOf5(i):
-        print(str(i) + "Buzz")
+        print("\rBuzz")
     elif isMultipleOf3(i):
-        print(str(i) + 'Fizz')
+        print('\rFizz')
     else:
         print(i)
-    
