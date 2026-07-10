@@ -7,7 +7,7 @@ import sys
 import time
 
 print("\nChoose your dice:")
-sides = int(input("d4 | d6 | d8 | d10 | d12 | d20 | d100 |  ")or 20)
+sides = int(input("d4 | d6 | d8 | d10 | d12 | d20 | d100 |  d")or 20)
 print(f"\nDice selected: d{sides}")
 
 number_of_dice = int(input("How many dice do you want to roll? ").strip() or 1)
@@ -27,10 +27,10 @@ dice_roller(number_of_dice, sides)
 
 def rolling_animation():
     start_time = time.time()
-    animation_speed = 0.1
+    animation_speed = 0.075
     frames = ["|", "/", "—", "\\", "|", "/", "—", "\\"]
     frame_index = 0
-    animation_duration = 1
+    animation_duration = 0.75
     while time.time() - start_time < animation_duration:
         current_frame = frames[frame_index]
         print(f"\Rolling... {current_frame}", end="\r")
@@ -52,9 +52,15 @@ def disadvantage_rolls(results):
 def advantage_rolls(results):
     return(max(results))
 
+#results = [20]
+
 rolling_animation()
-print(f"\r{sanatised_results(results)}\n")
+print(f"\rd{sides} results: {sanatised_results(results)}\n")
 if number_of_dice == 2 and sides == 20:
-    print(f"\nAdvantage: {advantage_rolls(results)} \nDisadvantage: {disadvantage_rolls(results)}")
+    print(f"\n\033[92mAdvantage: {advantage_rolls(results)} \n\033[91mDisadvantage: {disadvantage_rolls(results)}\033[0m")
+elif sides == 20 and results == [20]:
+    print(f"\n\033[93mCRIT: {max(results)}\033[0m")
+elif sides == 20 and results == [1]:
+    print(f"\n\033[91mFAIL: {max(results)}\033[0m")
 elif number_of_dice > 1:
     print(f"\rd{sides} total = {sum(results)}")
