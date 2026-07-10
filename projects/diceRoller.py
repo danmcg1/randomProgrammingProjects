@@ -5,28 +5,29 @@
 import random
 import sys
 import time
+from collections import defaultdict
 
-all_dice = []
+dice_to_roll = defaultdict(int)
 results = []
 
 def dice_to_be_rolled():
     print("\nChoose your dice: Default = d20")
     sides = int(input("d4 | d6 | d8 | d10 | d12 | d20 | d100 |  d")or 20)
     print(f"\nDice selected: d{sides}")
-    all_dice.append(sides)
+    number_of_dice = int(input("How many of this dice do you want to roll? ").strip() or 1)
+    dice_to_roll[f"d{sides}"] += number_of_dice
 
-number_of_dice = int(input("How many dice do you want to roll? ").strip() or 1)
 
-def roll_dice(sides):
+def roll_dice(dice_to_roll):
     return(random.randint(1,sides))
 
-def dice_roller(number_of_dice, sides):
+def dice_roller(sides, number_of_dice):
     while(number_of_dice > 0):
         roll = roll_dice(sides)
         results.append(roll)
         number_of_dice -= 1
-    
-dice_roller(number_of_dice, all_dice)
+
+dice_roller(number_of_dice, dice_to_roll)
 
 def rolling_animation():
     start_time = time.time()
@@ -42,11 +43,11 @@ def rolling_animation():
         time.sleep(animation_speed)
     print("\r                                    ")
 
-#def sanatised_results(results):
-    #clean_results = str(results[0])
-    #for i in results[1:]:
-    #    clean_results += ", " + str(i)
-    #return(clean_results)
+# def sanatised_results(results):
+#     clean_results = str(results[0])
+#     for i in results[1:]:
+#         clean_results += ", " + str(i)
+#     return(clean_results)
 
 def disadvantage_rolls(results):
     return(min(results))
