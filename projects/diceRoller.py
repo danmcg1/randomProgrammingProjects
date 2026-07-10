@@ -33,18 +33,18 @@ def rolling_animation():
     animation_duration = 0.75
     while time.time() - start_time < animation_duration:
         current_frame = frames[frame_index]
-        print(f"\Rolling... {current_frame}", end="\r")
+        print(f"Rolling... {current_frame}", end="\r")
         sys.stdout.flush()
 
         frame_index = (frame_index + 1) % len(frames)
         time.sleep(animation_speed)
     print("\r                                    ")
 
-def sanatised_results(results):
-    clean_results = str(results[0])
-    for i in results[1:]:
-        clean_results += ", " + str(i)
-    return(clean_results)
+#def sanatised_results(results):
+    #clean_results = str(results[0])
+    #for i in results[1:]:
+    #    clean_results += ", " + str(i)
+    #return(clean_results)
 
 def disadvantage_rolls(results):
     return(min(results))
@@ -55,7 +55,7 @@ def advantage_rolls(results):
 #results = [20]
 
 rolling_animation()
-print(f"\rd{sides} results: {sanatised_results(results)}\n")
+print(f"\rd{sides} results: {results}\n")
 if number_of_dice == 2 and sides == 20:
     print(f"\n\033[92mAdvantage: {advantage_rolls(results)} \n\033[91mDisadvantage: {disadvantage_rolls(results)}\033[0m")
 elif sides == 20 and results == [20]:
@@ -64,3 +64,7 @@ elif sides == 20 and results == [1]:
     print(f"\n\033[91mFAIL: {max(results)}\033[0m")
 elif number_of_dice > 1:
     print(f"\rd{sides} total = {sum(results)}")
+
+
+
+
