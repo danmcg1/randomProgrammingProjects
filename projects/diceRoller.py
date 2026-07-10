@@ -1,6 +1,6 @@
-#**Dice roller**
+# Dice roller
 # Write some code that simulates rolling a number of different dice for a TTRPG
-#  The code should record the outcomes and display a total.
+# The code should record the outcomes and display a total.
 
 import random
 import sys
@@ -38,7 +38,6 @@ def rolling_animation():
         current_frame = frames[frame_index]
         print(f"Rolling... {current_frame}", end="\r")
         sys.stdout.flush()
-
         frame_index = (frame_index + 1) % len(frames)
         time.sleep(animation_speed)
     print("\r                                    ")
