@@ -1,8 +1,10 @@
-#**Coin Flip Simulation**
-# Write some code that simulates flipping a single coin however many times the user decides.
-#  The code should record the outcomes and count the number of tails and heads.
+#**Dice roller**
+# Write some code that simulates rolling a number of different dice for a TTRPG
+#  The code should record the outcomes and display a total.
 
 import random
+import sys
+import time
 
 print("\nChoose your dice:")
 sides = int(input("d4 | d6 | d8 | d10 | d12 | d20 | d100 |  ")or 20)
@@ -23,5 +25,28 @@ def dice_roller(number_of_dice, sides):
     
 dice_roller(number_of_dice, sides)
 
-print(results)
-print(f"Total = {sum(results)}")
+def rolling_animation():
+    start_time = time.time()
+    animation_speed = 0.1
+    frames = ["|", "/", "—", "\\", "|", "/", "—", "\\"]
+    frame_index = 0
+    animation_duration = 1
+    while time.time() - start_time < animation_duration:
+        current_frame = frames[frame_index]
+        print(f"\Rolling... {current_frame}", end="\r")
+        sys.stdout.flush()
+
+        frame_index = (frame_index + 1) % len(frames)
+        time.sleep(animation_speed)
+    print("\r                                    ")
+
+def sanatised_results(results):
+    clean_results = str(results[0])
+    for i in results[1:]:
+        clean_results += ", " + str(i)
+    return(clean_results)
+
+rolling_animation()
+print(f"\r{sanatised_results(results)}\n")
+if number_of_dice > 1:
+    print(f"\rd{sides} total = {sum(results)}")
