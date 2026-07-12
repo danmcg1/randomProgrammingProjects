@@ -14,12 +14,19 @@ dice_type = 1
 while dice_type > 0:
 
     print("\nChoose your dice:")
-    dice_type = int(input("d4 | d6 | d8 | d10 | d12 | d20 | d100 |  d")or 0)
-    print(f"\nDice selected: d{dice_type}")
+    dice_type = int(input("d4 | d6 | d8 | d10 | d12 | d20 | d100 |  d").strip() or 0)
+    if dice_type == 0:
+        print(f"\nDice selected: d20")
+    else:
+        print(f"\nDice selected: d{dice_type}")
 
-    number_of_dice = int(input("How many dice do you want to roll? ").strip() or 1)
+    number_of_dice = int(input("How many dice do you want to roll? ").strip() or 0)
     dice_pool.update({dice_type: number_of_dice})
 
+if dice_pool == {0:0}:
+    dice_pool = {20:1}
+elif dice_pool == {0:number_of_dice}:
+    dice_pool = {20: number_of_dice}
 
 def dice_roll(type_of_dice):
     return(random.randint(1,type_of_dice))
@@ -48,11 +55,6 @@ def rolling_animation():
         time.sleep(animation_speed)
     print("\r                                    ")
 
-#def sanatised_results(results):
-    #clean_results = str(results[0])
-    #for i in results[1:]:
-    #    clean_results += ", " + str(i)
-    #return(clean_results)
 
 def disadvantage_rolls(results):
     return(min(results))
@@ -60,22 +62,21 @@ def disadvantage_rolls(results):
 def advantage_rolls(results):
     return(max(results))
 
-#results = [20]
 
 rolling_animation()
 
 def all_dice(dice_dict, results_pool):
     for type_of_dice in dice_dict:
         roll_dice_of_type(type_of_dice, dice_dict[type_of_dice])
-        
-        print(f"\r\nd{type_of_dice} results: {results_pool[type_of_dice]}")
-        if dice_dict[type_of_dice] == 2 and type_of_dice == 20:
-           print(f"\n\033[92mAdvantage: {advantage_rolls(results)} \n\033[91mDisadvantage: {disadvantage_rolls(results)}\033[0m")
-        elif type_of_dice == 20 and results == [20]:
-            print(f"\n\033[93mCRIT: {max(results)}\033[0m")
-        elif type_of_dice == 20 and results == [1]:
-            print(f"\n\033[91mFAIL: {max(results)}\033[0m")
-        elif type_of_dice > 1:
+        if sum(results_pool[type_of_dice]) != []:
+            print(f"\r\nd{type_of_dice} results: {results_pool[type_of_dice]}")
+        if dice_dict == {20: 2}:
+           print(f"\n\033[92mAdvantage: {advantage_rolls(results_pool[type_of_dice])} \n\033[91mDisadvantage: {disadvantage_rolls(results_pool[type_of_dice])}\033[0m")
+        elif type_of_dice == 20 and results_pool[type_of_dice] == [20]:
+            print(f"\n\033[93mCRIT: {max(results_pool[type_of_dice])}\033[0m")
+        elif type_of_dice == 20 and results_pool[type_of_dice] == [1]:
+            print(f"\n\033[91mFAIL: {max(results_pool[type_of_dice])}\033[0m")
+        elif dice_dict[type_of_dice] > 1:
             print(f"\rd{type_of_dice} total = {sum(results_pool[type_of_dice])}")
 
 
