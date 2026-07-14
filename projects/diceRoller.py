@@ -6,15 +6,14 @@ import random
 import sys
 import time
 
-def dice_roll(type_of_dice):
+def dice_roll(type_of_dice: int):
     return(random.randint(1,type_of_dice))
 
 def roll_dice_of_type(type_of_dice, number_of_dice):
     rolls = []
-    while number_of_dice > 0:
+    for n in range(number_of_dice):
         single_roll = dice_roll(type_of_dice)
         rolls.append(single_roll)
-        number_of_dice -= 1
     return(rolls)
         
 def rolling_animation():
