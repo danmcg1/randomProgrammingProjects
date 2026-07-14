@@ -4,28 +4,27 @@
 
 import random
 
-number_of_flips = int(input("How many coin flips do you want to make? ").strip() or 1)
-
-# heads = 0
-# tails = 0
-
-results = []
-
 def coin_flip():
     result = random.randint(0,1)
     if result == 0:
-        return("Heads")
+        return("H")
     elif result == 1:
-        return("Tails")
+        return("T")
     
 
 def flip_calculator(number_of_flips):
-    while(number_of_flips > 0):
+    results = []
+    for n in range(number_of_flips):
         flip = coin_flip()
         results.append(flip)
-        number_of_flips -= 1
+    return(results)
 
-flip_calculator(number_of_flips)
 
-print(results)
-print(f"Heads: {results.count('Heads')} | Tails: {results.count('Tails')} ")
+def main():
+    number_of_flips = int(input("How many coin flips do you want to make? ").strip() or 1)
+    results = flip_calculator(number_of_flips)
+    print(results)
+    print(f"Heads: {results.count('H')} | Tails: {results.count('T')} ")
+
+if __name__ == '__main__':
+    main()
