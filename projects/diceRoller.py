@@ -10,6 +10,7 @@ dice_pool = {}
 results = []
 results_pool = {}
 dice_type = 1
+number_of_dice = 1
 
 while dice_type > 0:
 
@@ -65,19 +66,17 @@ def advantage_rolls(results):
 
 rolling_animation()
 
-def all_dice(dice_dict, results_pool):
+def all_dice(dice_dict, results_dict):
     for type_of_dice in dice_dict:
         roll_dice_of_type(type_of_dice, dice_dict[type_of_dice])
-        if sum(results_pool[type_of_dice]) != []:
-            print(f"\r\nd{type_of_dice} results: {results_pool[type_of_dice]}")
+        if sum(results_dict[type_of_dice]) > 1:
+            print(f"\r\nd{type_of_dice} results: {results_dict[type_of_dice]}")
         if dice_dict == {20: 2}:
-           print(f"\n\033[92mAdvantage: {advantage_rolls(results_pool[type_of_dice])} \n\033[91mDisadvantage: {disadvantage_rolls(results_pool[type_of_dice])}\033[0m")
-        elif type_of_dice == 20 and results_pool[type_of_dice] == [20]:
-            print(f"\n\033[93mCRIT: {max(results_pool[type_of_dice])}\033[0m")
-        elif type_of_dice == 20 and results_pool[type_of_dice] == [1]:
-            print(f"\n\033[91mFAIL: {max(results_pool[type_of_dice])}\033[0m")
-        elif dice_dict[type_of_dice] > 1:
-            print(f"\rd{type_of_dice} total = {sum(results_pool[type_of_dice])}")
+           print(f"\n\033[92mAdvantage: {advantage_rolls(results_dict[type_of_dice])} \n\033[91mDisadvantage: {disadvantage_rolls(results_dict[type_of_dice])}\033[0m")
+        elif type_of_dice == 20 and results_dict[type_of_dice] == [20]:
+            print(f"\n\033[93mCRIT: {max(results_dict[type_of_dice])}\033[0m")
+        elif type_of_dice == 20 and results_dict[type_of_dice] == [1]:
+            print(f"\n\033[91mFAIL: {max(results_dict[type_of_dice])}\033[0m")
 
 
 all_dice(dice_pool, results_pool)
