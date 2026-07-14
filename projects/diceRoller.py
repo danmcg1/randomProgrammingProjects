@@ -13,14 +13,12 @@ dice_type = 1
 number_of_dice = 1
 
 while dice_type > 0:
-
     print("\nChoose your dice:")
     dice_type = int(input("d4 | d6 | d8 | d10 | d12 | d20 | d100 |  d").strip() or 0)
     if dice_type == 0:
         print(f"\nDice selected: d20")
     else:
         print(f"\nDice selected: d{dice_type}")
-
     number_of_dice = int(input("How many dice do you want to roll? ").strip() or 0)
     dice_pool.update({dice_type: number_of_dice})
 
@@ -77,6 +75,9 @@ def all_dice(dice_dict, results_dict):
             print(f"\n\033[93mCRIT: {max(results_dict[type_of_dice])}\033[0m")
         elif type_of_dice == 20 and results_dict[type_of_dice] == [1]:
             print(f"\n\033[91mFAIL: {max(results_dict[type_of_dice])}\033[0m")
+        elif dice_dict[type_of_dice] > 1:
+            print(f"\rd{type_of_dice} total = {sum(results_pool[type_of_dice])}")
+
 
 
 all_dice(dice_pool, results_pool)
