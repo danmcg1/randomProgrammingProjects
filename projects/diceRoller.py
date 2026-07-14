@@ -76,7 +76,7 @@ def all_dice(dice_dict, results_dict):
         elif type_of_dice == 20 and results_dict[type_of_dice] == [1]:
             print(f"\n\033[91mFAIL: {max(results_dict[type_of_dice])}\033[0m")
         elif dice_dict[type_of_dice] > 1:
-            print(f"\rd{type_of_dice} total = {sum(results_pool[type_of_dice])}")
+            print(f"\rd{type_of_dice} total = {sum(results_dict[type_of_dice])}")
 
 
 
