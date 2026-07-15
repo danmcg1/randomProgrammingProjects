@@ -6,12 +6,12 @@ import math
 
 pi=math.pi
 
-i = int(input("Pick a number: "))
+i: int = int(input("Pick a number: "))
 
 if i > 10:
     i=10
 
-def piToDigit(i):
+def piToDigit(i: int):
     """Returns pi to the number generated from i"""
     print(round(pi,i))
 

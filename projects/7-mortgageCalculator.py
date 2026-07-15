@@ -22,11 +22,11 @@ interest_interval = "monthly"
 
 ### ---------------------------------- Creating basic inputs -------------------------------
 
-def interest_rate_percentage(mortgage_dict):
+def interest_rate_percentage(mortgage_dict: dict):
     interest_rate_as_percentage = mortgage_dict["interest_rate"] / 100
     return(interest_rate_as_percentage)
 
-def interest_rate_in_period(mortgage_dict):
+def interest_rate_in_period(mortgage_dict: dict):
     # Returns the rate directly instead of assigning to a global variable
     rate_as_pct = interest_rate_percentage(mortgage_dict)
     if interest_interval == "yearly":
@@ -56,17 +56,17 @@ payment_details = []
 
 ### -------------------------- Calculation Functions -------------------------------
 
-def starting_balance(mortgage_dict):
+def starting_balance(mortgage_dict: dict):
     return mortgage_dict["principle"]
 
-def periodic_payment(mortgage_dict, r, n):
+def periodic_payment(mortgage_dict: dict, r: float, n: int):
     # Basic protection against division by zero if interest rate is 0
     if r == 0:
         return mortgage_dict["principle"] / n
     payment = mortgage_dict["principle"] * ((r * pow(1 + r, n)) / (pow(1 + r, n) - 1))
     return payment
 
-def interest_over_period(mortgage_dict, r):
+def interest_over_period(mortgage_dict: dict, r: float):
     return mortgage_dict["current_balance"] * r
 
 #### ------------------------------- Performing calculations --------------------------------

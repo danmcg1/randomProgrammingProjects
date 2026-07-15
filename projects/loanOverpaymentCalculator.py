@@ -9,13 +9,13 @@ loan_1 = {
     "principle": 18000,
 }
 
-overpayments = 100
+overpayments: int = 100
 
 #["yearly","monthly","weekly","daily"]
 interest_interval = "monthly" 
 
 ### ------------------------------ Setuo functions -----------------------------
-def interest_rate_percentage_conversion(loan_dict):
+def interest_rate_percentage_conversion(loan_dict: dict):
     interest_rate_percentage = loan_dict["interest_rate"] / 100
     return(interest_rate_percentage)
 
@@ -30,7 +30,7 @@ def interest_rate_in_period(loan_dict):
         return (interest_rate_percentage_conversion(loan_dict) / 365) 
     return(0)
 
-def number_of_periods(loan_dict):
+def number_of_periods(loan_dict: dict):
     if interest_interval == "yearly":
         n = loan_dict["loan_term"] 
     elif interest_interval == "monthly":

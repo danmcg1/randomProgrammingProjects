@@ -7,7 +7,7 @@ def userSelectNumber():
     selected_number = int(input('Select a number: '))
     return selected_number
 
-def isPrimeNumber(number):
+def isPrimeNumber(number: int):
     if number < 2:
         return False
     for n in range(2, int(math.sqrt(number)) + 1):
@@ -15,7 +15,7 @@ def isPrimeNumber(number):
             return False
     return True
 
-def nextPrimeNumber(selected_number):
+def nextPrimeNumber(selected_number: int):
     number = selected_number
     while isPrimeNumber(number) == False:
         isPrimeNumber(number)

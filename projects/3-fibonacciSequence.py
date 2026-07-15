@@ -8,7 +8,7 @@ position = int(input("What position do you want?: "))
 
 numbers = [1,1]
 
-def fibonacci(position):
+def fibonacci(position: int):
     """Appending to the array instead of replacing it"""
     if position == 0:
         print(0)

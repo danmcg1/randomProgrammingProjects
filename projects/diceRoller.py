@@ -9,7 +9,7 @@ import time
 def dice_roll(type_of_dice: int):
     return(random.randint(1,type_of_dice))
 
-def roll_dice_of_type(type_of_dice, number_of_dice):
+def roll_dice_of_type(type_of_dice: int, number_of_dice: int):
     rolls = []
     for n in range(number_of_dice):
         single_roll = dice_roll(type_of_dice)
@@ -32,10 +32,10 @@ def rolling_animation():
     print("\r                                    ")
 
 
-def disadvantage_rolls(results):
+def disadvantage_rolls(results: list):
     return(min(results))
 
-def advantage_rolls(results):
+def advantage_rolls(results: list):
     return(max(results))
 
 def get_user_dice_pool():
@@ -46,13 +46,13 @@ def get_user_dice_pool():
 
     while dice_type > 0:
         print("\nChoose your dice:")
-        dice_type = int(input("d4 | d6 | d8 | d10 | d12 | d20 | d100 |  d").strip() or 0)
+        dice_type: int = int(input("d4 | d6 | d8 | d10 | d12 | d20 | d100 |  d").strip() or 0)
         if dice_type == 0:
             print(f"\nDice selected: d20")
         else:
             print(f"\nDice selected: d{dice_type}")
 
-        number_of_dice = int(input("How many dice do you want to roll? ").strip() or 0)
+        number_of_dice: int = int(input("How many dice do you want to roll? ").strip() or 0)
         dice_pool.update({dice_type: number_of_dice})
 
     if dice_pool == {0:0}:
@@ -63,7 +63,7 @@ def get_user_dice_pool():
     return(dice_pool)
 
 
-def process_and_display_rolls(dice_dict):
+def process_and_display_rolls(dice_dict: dict):
     
     results_dict = {}
     

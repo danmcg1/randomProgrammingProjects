@@ -6,7 +6,7 @@ def userSelectNumber():
     selected_number = int(input('Select a number: '))
     return selected_number
 
-def primeNumberReturn(selected_number):
+def primeNumberReturn(selected_number: int):
     factors = []
     n = 2
     # While loop config will search only for the number up to the root of selected_number. Significant performance improvement this way. 

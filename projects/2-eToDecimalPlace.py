@@ -6,10 +6,10 @@ import math
 
 e=math.e
 
-i = int(input("Pick a number between 1 and 10: "))
+i: int = int(input("Pick a number between 1 and 10: "))
 
-def eToDigit(i):
-    """Returns pi to the number generated from i"""
+def eToDigit(i: int):
+    """Returns e to the number generated from i"""
     print(round(e,i))
 
 eToDigit(i)

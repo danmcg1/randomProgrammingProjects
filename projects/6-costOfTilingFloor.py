@@ -1,9 +1,9 @@
-width = int(input("What is the width?: "))
-length = int(input("What is the length?: ")) 
+width: float = float(input("What is the width?: "))
+length: float = float(input("What is the length?: ")) 
 
-cost = int(input("How much does the material cost?: "))
+cost: float = float(input("How much does the material cost?: "))
 
 area = width*length
 total_cost = area * cost
 
-print (total_cost)
+print (f"{total_cost:.2f}")
