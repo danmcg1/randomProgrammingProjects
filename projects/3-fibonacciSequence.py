@@ -2,9 +2,9 @@
 #Enter a number and have the program generate the Fibonacci sequence 
 #to that number or to the Nth number.
 import random
-position = random.randint(1,20)
+position: int = random.randint(1,20)
 
-position = int(input("What position do you want?: "))
+position: int = int(input("What position do you want?: "))
 
 numbers = [1,1]
 

@@ -3,7 +3,7 @@
 # // (if there are any) and display them.
 
 def userSelectNumber():
-    selected_number = int(input('Select a number: '))
+    selected_number: int = int(input('Select a number: '))
     return selected_number
 
 def primeNumberReturn(selected_number: int):

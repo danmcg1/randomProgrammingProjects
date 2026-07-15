@@ -4,7 +4,7 @@
 import math
 
 def userSelectNumber():
-    selected_number = int(input('Select a number: '))
+    selected_number: int = int(input('Select a number: '))
     return selected_number
 
 def isPrimeNumber(number: int):
