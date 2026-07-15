@@ -6,7 +6,7 @@ position = random.randint(1,20)
 
 position = int(input("What position do you want?: "))
 
-numbers = [0,1]
+numbers = [1,1]
 
 def fibonacci(position):
     """Appending to the array instead of replacing it"""
@@ -16,7 +16,7 @@ def fibonacci(position):
         print(1)
     else:
         for i in range(position):
-            new_number= numbers[i]+numbers[i+1]
+            new_number = numbers[i]+numbers[i+1]
             numbers.append(new_number)
             print(numbers[i])
 
