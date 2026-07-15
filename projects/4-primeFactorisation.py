@@ -9,11 +9,13 @@ def userSelectNumber():
 def primeNumberReturn(selected_number):
     factors = []
     n = 2
+    # While loop config will search only for the number up to the root of selected_number. Significant performance improvement this way. 
     while n * n <= selected_number:
         while selected_number % n == 0:
             factors.append(n)
             selected_number //= n
         n += 1
+    # This if statement is only required when performing the loop on the root of selected number. As in n * n <= selected_number
     if selected_number > 1:
         factors.append(int(selected_number))
     return factors
