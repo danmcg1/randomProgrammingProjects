@@ -3,8 +3,8 @@
 # You may assume that each input would have exactly one solution, and you may not use the same element twice.
 # You can return the answer in any order.
 
-nums = [15,7,11,2]
-target = 9
+nums = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+target = 10
 
 # nums = [3,2,4]
 # target = 6
@@ -20,7 +20,6 @@ class Solution(object):
         :rtype: List[int]
         """
         results_dict = {}
-        results = []
 
         for index, num in enumerate(nums):
             complement = target - num
