@@ -3,8 +3,8 @@
 # You may assume that each input would have exactly one solution, and you may not use the same element twice.
 # You can return the answer in any order.
 
-# nums = [2,7,11,15]
-# target = 9
+nums = [15,7,11,2]
+target = 9
 
 # nums = [3,2,4]
 # target = 6

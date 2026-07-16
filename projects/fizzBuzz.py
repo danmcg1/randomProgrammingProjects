@@ -10,10 +10,10 @@ def isMultipleOf5(n: int):
 
 for i in range(1, 101):
     if isMultipleOf3(i) & isMultipleOf5(i):
-        print("\rFizzBuzz")
+        print("FizzBuzz")
     elif isMultipleOf5(i):
-        print("\rBuzz")
+        print("Buzz")
     elif isMultipleOf3(i):
-        print('\rFizz')
+        print('Fizz')
     else:
         print(i)
