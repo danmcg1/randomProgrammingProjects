@@ -41,25 +41,29 @@ def advantage_rolls(results: list):
 def get_user_dice_pool():
     
     dice_pool: dict = {}
-    number_of_dice: int = 1
     dice_type: int = 1
+    number_of_dice: int = 1
 
     while dice_type > 0:
         print("\nChoose your dice:")
-        dice_type = int(input("d4 | d6 | d8 | d10 | d12 | d20 | d100 |  d").strip() or 0)
+        dice_type = int(input("d4 | d6 | d8 | d10 | d12 | d20 | d100 | d").strip() or 0)
         if dice_type == 0:
             print(f"\nDice selected: d20")
         else:
             print(f"\nDice selected: d{dice_type}")
 
         number_of_dice: int = int(input("How many dice do you want to roll? ").strip() or 0)
+        print(f"Number of dice: {number_of_dice}")
         dice_pool.update({dice_type: number_of_dice})
 
     if dice_pool == {0:0}:
         dice_pool = {20:1}
     elif dice_pool == {0:number_of_dice}:
         dice_pool = {20: number_of_dice}
-
+    for dice_type, num_dice in dice_pool.items():
+        if dice_type > 0 and num_dice == 0:
+            dice_pool[dice_type] = 1        
+    dice_pool.pop(0, None)
     return(dice_pool)
 
 

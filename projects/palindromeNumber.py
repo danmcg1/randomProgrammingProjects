@@ -1,7 +1,7 @@
 
 # Check whether a number is a palindrome with True or False being returned
 
-x = 1000001
+x = 833929338
 
 class Solution(object):
     def isPalindrome(self, x):
