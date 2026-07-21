@@ -17,16 +17,35 @@ mortgage_2 = {
 
 my_mortgages = [mortgage_1, mortgage_2]
 
-interest_interval = "monthly" 
-#["yearly","monthly","weekly","daily"]
+def get_interest_interval() -> str:
 
+    interest_interval_choices = ("yearly","monthly","weekly","daily")
+    user_input = ''
+
+    input_message = "Pick an option:\n"
+
+    options = interest_interval_choices
+
+    for index, item in enumerate(options):
+        input_message += f'{index+1}) {item}\n'
+
+    input_message += 'Your choice: '
+
+    while user_input not in map(str, range(1, len(options) + 1)):
+        user_input = input(input_message)
+
+    interest_interval = options[int(user_input) - 1]
+    print('You picked: ' + interest_interval)
+    return(interest_interval)
+
+interest_interval = get_interest_interval()
 ### ---------------------------------- Creating basic inputs -------------------------------
 
 def interest_rate_percentage(mortgage_dict: dict):
     interest_rate_as_percentage = mortgage_dict["interest_rate"] / 100
     return(interest_rate_as_percentage)
 
-def interest_rate_in_period(mortgage_dict: dict):
+def interest_rate_in_period(mortgage_dict: dict, interest_interval):
     # Returns the rate directly instead of assigning to a global variable
     rate_as_pct = interest_rate_percentage(mortgage_dict)
     if interest_interval == "yearly":
@@ -39,7 +58,7 @@ def interest_rate_in_period(mortgage_dict: dict):
         return rate_as_pct / 365 
     return 0.0
 
-def number_of_periods():
+def number_of_periods(interest_interval):
     if interest_interval == "yearly":
         return mortgage_term 
     elif interest_interval == "monthly":
@@ -50,9 +69,8 @@ def number_of_periods():
         return mortgage_term * 365
     return 0
 
-n = number_of_periods()
+n = number_of_periods(interest_interval)
 
-payment_details = []
 
 ### -------------------------- Calculation Functions -------------------------------
 
@@ -76,20 +94,21 @@ for mortgage in my_mortgages:
     mortgage["current_balance"] = starting_balance(mortgage)
 
 combined_total_owed = sum(m["principle"] for m in my_mortgages)
-combined_periodic_payment = sum(periodic_payment(m, interest_rate_in_period(m), n) for m in my_mortgages)
+combined_periodic_payment = sum(periodic_payment(m, interest_rate_in_period(m,interest_interval), n) for m in my_mortgages)
 
 print(f"Initial Total Owed: £{combined_total_owed:.2f} | Bill for period: £{combined_periodic_payment:.2f}\n")
 
 ### ------------------------------- Calculations for each period -----------------------------------
 for period in range(1, int(n + 1)):
-    
+
+    payment_details = []
     combined_interest_this_period = 0.0
     combined_principle_paid_this_period = 0.0
     combined_remaining_balance = 0.0
 
     for mortgage in my_mortgages:
         # Calculate r dynamically for THIS specific mortgage
-        r = interest_rate_in_period(mortgage)
+        r = interest_rate_in_period(mortgage, interest_interval)
 
         interest_this_period = interest_over_period(mortgage, r)
         
