@@ -44,9 +44,7 @@ def unit_convertion(value, conversion) -> float:
 
 def main() -> float:
     conversion = get_user_input()
-    print(unit_convertion(conversion[0], conversion[1]))
-    # conversion_result = value * conversion
-    # return(conversion_result)
+    print(unit_convertion(conversion[1], conversion[0]))
 
 if __name__ == "__main__":
     main()
