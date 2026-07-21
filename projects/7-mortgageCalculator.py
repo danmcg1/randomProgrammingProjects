@@ -2,7 +2,7 @@
 # Also figure out how long it will take the user to pay back the loan. 
 # For added complexity, add an option for users to select the compounding interval (Monthly, Weekly, Daily, Continually).
 
-# mortgage_term = int(input("What is the mortgage term?: "))
+# mortgage_term = float(input("What is the mortgage term?: ") or 26.8)
 mortgage_term = 26.8
 
 mortgage_1 = {
@@ -17,9 +17,16 @@ mortgage_2 = {
 
 my_mortgages = [mortgage_1, mortgage_2]
 
+interest_intervals = {
+        "yearly": 1,
+        "monthly": 12,
+        "weekly": 52,
+        "daily": 365,
+    }
+
 def get_interest_interval() -> str:
 
-    interest_interval_choices = ("yearly","monthly","weekly","daily")
+    interest_interval_choices = list(interest_intervals.keys())
     user_input = ''
 
     input_message = "Pick an option:\n"
@@ -39,24 +46,16 @@ def get_interest_interval() -> str:
     return(interest_interval)
 
 interest_interval = get_interest_interval()
-### ---------------------------------- Creating basic inputs -------------------------------
 
-def interest_rate_percentage(mortgage_dict: dict):
-    interest_rate_as_percentage = mortgage_dict["interest_rate"] / 100
-    return(interest_rate_as_percentage)
 
-def period_constants(mortgage_dict: dict, interest_interval):
-    # Returns the rate directly instead of assigning to a global variable
-    rate_as_pct = interest_rate_percentage(mortgage_dict)
-    if interest_interval == "yearly":
-        return [rate_as_pct,mortgage_term]
-    elif interest_interval == "monthly":
-        return [rate_as_pct / 12, mortgage_term * 12]
-    elif interest_interval == "weekly":
-        return [rate_as_pct / 52, mortgage_term * 52]
-    elif interest_interval == "daily":
-        return [rate_as_pct / 365, mortgage_term * 365]
-    return [0.0,0.0]
+def period_constants(mortgage_dict: dict, interest_interval: str):
+    rate_as_pct = mortgage_dict["interest_rate"] / 100
+
+    if interest_interval in interest_intervals:
+        multiplier = interest_intervals[interest_interval]
+        return [rate_as_pct / multiplier, mortgage_term * multiplier]
+
+    return [0.0, 0.0]
 
 
 ### -------------------------- Calculation Functions -------------------------------
