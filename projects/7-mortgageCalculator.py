@@ -64,7 +64,6 @@ def starting_balance(mortgage_dict: dict):
     return mortgage_dict["principle"]
 
 def periodic_payment(mortgage_dict: dict, r: float, n: int):
-    # Basic protection against division by zero if interest rate is 0
     if r == 0:
         return mortgage_dict["principle"] / n
     payment = mortgage_dict["principle"] * ((r * pow(1 + r, n)) / (pow(1 + r, n) - 1))
@@ -73,23 +72,22 @@ def periodic_payment(mortgage_dict: dict, r: float, n: int):
 def interest_over_period(mortgage_dict: dict, r: float):
     return mortgage_dict["current_balance"] * r
 
-#### ------------------------------- Performing calculations --------------------------------
 
-# Initialize the current balance for each mortgage
-def initial_calculations():
+def all_calculations():
+### --------------------------------- Calculations on mortgage total  ---------------------------------
+    combined_total_owed = 0.0
+    combined_periodic_payment = 0.0
+
     for mortgage in my_mortgages:
         mortgage["current_balance"] = starting_balance(mortgage)
+        
         r, n = period_constants(mortgage, interest_interval)
-
-    combined_total_owed = sum(m["principle"] for m in my_mortgages)
-    combined_periodic_payment = sum(periodic_payment(m, r, n) for m in my_mortgages)
-
-    print(f"Initial Total Owed: £{combined_total_owed:.2f} | Bill for period: £{combined_periodic_payment:.2f}\n")
-    return(r,n)
+        payment = periodic_payment(mortgage, r, n)
+        
+        combined_total_owed += mortgage["principle"] 
+        combined_periodic_payment += payment
 
 ### ------------------------------- Calculations for each period -----------------------------------
-def period_calculations(r: float, n:float):
-
     for period in range(1, int(n + 1)):
 
         payment_details = []
@@ -98,10 +96,8 @@ def period_calculations(r: float, n:float):
         combined_remaining_balance = 0.0
 
         for mortgage in my_mortgages:
-            # Calculate r dynamically for THIS specific mortgage
             interest_this_period = interest_over_period(mortgage, r)
             
-            # Calculate payment based on this mortgage's specific rate
             mortgage_payment = periodic_payment(mortgage, r, n)
             principle_paid_this_period = mortgage_payment - interest_this_period
 
@@ -119,11 +115,12 @@ def period_calculations(r: float, n:float):
             })
 
         print(f"Period {period:3d} | Remaining Owed: £{combined_remaining_balance:10.2f} | Combined Interest: £{combined_interest_this_period:7.2f} |")
+    print(f"\nInitial Total Owed: £{combined_total_owed:.2f} | Bill for period: £{combined_periodic_payment:.2f}\n")
+
 
 
 def main():
-    r,n = initial_calculations()
-    period_calculations(r,n)
-
+    all_calculations()
+    
 if __name__ == '__main__':
     main()
