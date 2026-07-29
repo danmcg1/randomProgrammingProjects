@@ -62,7 +62,7 @@ def findEmptyCells(grid):
                 pass
 
 def main():
-    checkIfValueInZone(sudokuTable, 8,2)
+    checkIfValueInZone(sudokuTable,8,2)
 
 if __name__ == '__main__':
     main()
