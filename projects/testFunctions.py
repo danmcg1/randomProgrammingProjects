@@ -1,12 +1,9 @@
 
 def test_function():
     input = "Putting a string in here. Just like this..."
-    input_list = list(enumerate(input))
-    reversed = sorted(input_list, key=lambda tup: tup[0], reverse=True)
-    for i in reversed:
-        reversed_input = []
-        reversed_input.append(i[1])   
-    output = ''.join([str(s) for s in reversed_input])
+    reversed_input = sorted(list(enumerate(input)), key=lambda tup: tup[0], reverse=True)
+    reversed_list = [i[1] for i in reversed_input]
+    output = ''.join(reversed_list)
     
     return(output)
 
