@@ -38,14 +38,14 @@ def get_user_input() -> tuple:
     value = float(input(f"How many units?: "))
     return((conversion, value))
 
-def unit_convertion(value, conversion) -> float:
+def unit_conversion(value, conversion) -> float:
     multiplier = conversion_rates[conversion]
     converted_unit = value * multiplier
     return(converted_unit)
 
 def main() -> float:
     conversion = get_user_input()
-    print(unit_convertion(conversion[1], conversion[0]))
+    print(unit_conversion(conversion[1], conversion[0]))
 
 if __name__ == "__main__":
     main()
