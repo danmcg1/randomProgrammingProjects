@@ -65,7 +65,7 @@ def isValueValidAtLocation(table, row, col, value):
 
 def checkSimpleEntries(table, row, col):
     validEntries = []
-    for n in range(len(table)):
+    for n in range(1, len(table)+1):
         if isValueValidAtLocation(table,row,col,n) == True:
             validEntries.append((n,row,col))
     return(validEntries)
@@ -74,12 +74,12 @@ def checkSimpleEntries(table, row, col):
 def checkSimpleEntries2(table):
     for row, col in findEmptyCells(table):
         valid_options = []
-        for num in range(len(table)):
+        for num in range(1, len(table)+1):
             if isValueValidAtLocation(table,row,col,num) == True:
                 valid_options.append(num)
-            if len(valid_options) == 1:
-                table[row,col] = valid_options[0]
-        return(table)
+        if len(valid_options) == 1:
+            table[row,col] = valid_options[0]
+    return(table)
 
 
 
