@@ -28,41 +28,67 @@ columnGroup3 = sudokuTable[:,6:9]
 zoneA1 = sudokuTable[0:3, 0:3]
 zoneA2 = sudokuTable[0:3, 3:6]
 zoneA3 = sudokuTable[0:3, 6:9]
-
 zoneB1 = sudokuTable[3:6, 0:3]
 zoneB2 = sudokuTable[3:6, 3:6]
 zoneB3 = sudokuTable[3:6, 6:9]
-
 zoneC1 = sudokuTable[6:9, 0:3]
 zoneC2 = sudokuTable[6:9, 3:6]
 zoneC3 = sudokuTable[6:9, 6:9]
 
+table = sudokuTable
 
-def checkIfValueInZone(grid, row, col):
-
-    # Given any cell at row 4, col 7:
-    #row, col = 8, 2
-
-    # Calculate the top-left corner of its 3x3 box
-    box_row_start = (row // 3) * 3  # (4 // 3) * 3 = 3
-    box_col_start = (col // 3) * 3  # (7 // 3) * 3 = 6
-
-    # Slice the 3x3 box dynamically
-    current_box = grid[box_row_start : box_row_start + 3, box_col_start : box_col_start + 3]
-
-    # Check if a candidate number is already in that box
-    print(current_box)
+def findEmptyCells(table) -> list:
+    emptyValues = []
+    for row in range(len(table)):
+        for col in range(len(table)):
+            if table[row, col] == 0:
+                emptyValues.append((row,col))
+    return(emptyValues)
 
 
-def findEmptyCells(grid):
-    for row in range(9):
-        for col in range(9):
-            if grid[row, col] == 0:
-                # Found an empty cell to solve!
-                pass
+def getCurrentZone(table, row, col):
+    zoneRowStart = (row // 3) * 3 
+    zoneColumnStart = (col // 3) * 3 
+    currentZone = table[zoneRowStart : zoneRowStart + 3, zoneColumnStart : zoneColumnStart + 3]
+    return(currentZone)
+
+
+def isValueValidAtLocation(table, row, col, value):
+    fullRow = table[row]
+    fullCol = table[:,col]
+    fullZone = getCurrentZone(table,row,col).flatten()
+    if value in fullRow or value in fullCol or value in fullZone:
+        return(False)
+    else:
+        return(True)
+
+
+def checkSimpleEntries(table, row, col):
+    validEntries = []
+    for n in range(len(table)):
+        if isValueValidAtLocation(table,row,col,n) == True:
+            validEntries.append((n,row,col))
+    return(validEntries)
+
+
+def checkSimpleEntries2(table):
+    for row, col in findEmptyCells(table):
+        valid_options = []
+        for num in range(len(table)):
+            if isValueValidAtLocation(table,row,col,num) == True:
+                valid_options.append(num)
+            if len(valid_options) == 1:
+                table[row,col] = valid_options[0]
+        return(table)
+
+
+
 
 def main():
-    checkIfValueInZone(sudokuTable,8,2)
+
+    print(checkSimpleEntries2(table))
+
+
 
 if __name__ == '__main__':
     main()
