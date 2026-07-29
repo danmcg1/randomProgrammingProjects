@@ -1,7 +1,7 @@
 
 # Create a sudoku solver
 # Initially just work on the code to check for the correct values
- # Next work on giving it a file/photo of a sudoku puzzle and having it generate the data from that
+ # Next work on giving it a file/photo of a sudoku puzzle and having it generate the data from it
 
 import numpy as np
 
