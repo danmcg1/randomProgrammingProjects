@@ -86,8 +86,9 @@ def checkSimpleEntries(table):
 
 
 def main():
-
-    print(checkSimpleEntries(table))
+    while 0 in table:
+        checkSimpleEntries(table)
+    print(table)
 
 
 
