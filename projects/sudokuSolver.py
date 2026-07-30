@@ -156,12 +156,12 @@ def checkHiddenSinglesInZones(table) -> list:
 
             for num in range(1, len(table)+1):
                 possible_cells = []
-                # Step 1: Scan ALL 9 cells in this 3x3 zone
+                # Scan ALL 9 cells in this 3x3 zone
                 for r in range(zone_row, zone_row + 3):
                     for c in range(zone_col, zone_col + 3):
                         if table[r, c] == 0 and isValueValidAtLocation(table,r,c,num):
                             possible_cells.append((r,c))
-                # Step 2: After checking the full zone, evaluate the total matches
+                # After checking the full zone, evaluate the total matches
                 if len(possible_cells) == 1:
                     target_r, target_c = possible_cells[0]
                     table[target_r, target_c] = num
