@@ -46,16 +46,29 @@ import tabulate as tb
 # ])
 
 # -------------------- Expert puzzle ----------------------------
+# sudokuTable = np.array([
+#     [1,5,0,0,8,2,0,0,0],
+#     [3,0,0,0,7,0,0,1,0],
+#     [0,0,0,0,0,0,7,5,3],
+#     [0,0,0,5,2,7,6,0,9],
+#     [0,0,0,0,0,0,5,0,0],
+#     [0,4,0,0,6,3,8,0,7],
+#     [4,0,0,0,0,8,0,0,0],
+#     [7,0,3,0,4,0,1,0,0],
+#     [0,0,8,6,0,0,3,0,0],
+# ])
+
+# -------------------- Master puzzle ----------------------------
 sudokuTable = np.array([
-    [1,5,0,0,8,2,0,0,0],
-    [3,0,0,0,7,0,0,1,0],
-    [0,0,0,0,0,0,7,5,3],
-    [0,0,0,5,2,7,6,0,9],
-    [0,0,0,0,0,0,5,0,0],
-    [0,4,0,0,6,3,8,0,7],
-    [4,0,0,0,0,8,0,0,0],
-    [7,0,3,0,4,0,1,0,0],
-    [0,0,8,6,0,0,3,0,0],
+    [0,7,0,0,4,5,2,9,0],
+    [0,4,3,7,2,0,5,0,0],
+    [6,0,0,0,9,0,7,0,0],
+    [0,0,0,0,0,0,0,0,0],
+    [0,0,5,0,0,0,0,0,4],
+    [2,3,0,0,7,9,8,0,0],
+    [7,0,0,0,0,0,0,0,0],
+    [0,1,9,0,8,0,0,0,0],
+    [0,8,0,2,0,4,0,1,0],
 ])
 
 table = sudokuTable
@@ -138,31 +151,29 @@ def checkHiddenSinglesInCols(table) -> list:
     return(table)
 
 def checkHiddenSinglesInZones(table) -> list:
-    for zone_row, zone_col in range(len(table), 3):
-        for num in range(1, len(table) + 1):
-            possible_cells = []
+    for zone_row in range(0, len(table), 3):
+        for zone_col in range(0,len(table), 3):
+
+            for num in range(1, len(table)+1):
+                possible_cells = []
+                # Step 1: Scan ALL 9 cells in this 3x3 zone
+                for r in range(zone_row, zone_row + 3):
+                    for c in range(zone_col, zone_col + 3):
+                        if table[r, c] == 0 and isValueValidAtLocation(table,r,c,num):
+                            possible_cells.append((r,c))
+                # Step 2: After checking the full zone, evaluate the total matches
+                if len(possible_cells) == 1:
+                    target_r, target_c = possible_cells[0]
+                    table[target_r, target_c] = num
+    return(table)
             
-
-
-
-
-# def main():
-#     for i in range(len(table)):
-#         checkSimpleExclusiveEntries(table)
-#         checkHiddenSinglesInRows(table)
-#         checkHiddenSinglesInCols(table)
-#         if 0 not in table:
-#             break
-
-#     print(tb.tabulate(table,tablefmt="grid"))
-
-
 def main():
     while 0 in table:
         empty_before = np.count_nonzero(table == 0)
         checkSimpleExclusiveEntries(table)
         checkHiddenSinglesInRows(table)
         checkHiddenSinglesInCols(table)
+        checkHiddenSinglesInZones(table)
         empty_after = np.count_nonzero(table == 0)
         
         if empty_after == empty_before:
