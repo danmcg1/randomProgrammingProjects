@@ -205,7 +205,7 @@ def main():
     if 0 in table:
             print("\nSolution reached via purely logical processes")
             print(tb.tabulate(table, tablefmt="grid"))
-            print("\nLogical solver stuck — finishing with backtracking...\n")
+            print("\nLogical solver stuck — finishing with recursive backtracking...\n")
             recursiveSolve(table)
             
     print(tb.tabulate(table, tablefmt="grid"))
