@@ -166,20 +166,45 @@ def checkHiddenSinglesInZones(table) -> list:
                     target_r, target_c = possible_cells[0]
                     table[target_r, target_c] = num
     return(table)
-            
-def main():
-    while 0 in table:
-        empty_before = np.count_nonzero(table == 0)
-        checkSimpleExclusiveEntries(table)
-        checkHiddenSinglesInRows(table)
-        checkHiddenSinglesInCols(table)
-        checkHiddenSinglesInZones(table)
-        empty_after = np.count_nonzero(table == 0)
-        
-        if empty_after == empty_before:
-            print("Logical solver stuck — advanced strategies or guessing required.")
-            break
 
+def attemptSolve(table) -> bool:
+    while 0 in table:
+            empty_before = np.count_nonzero(table == 0)
+            checkSimpleExclusiveEntries(table)
+            checkHiddenSinglesInRows(table)
+            checkHiddenSinglesInCols(table)
+            checkHiddenSinglesInZones(table)
+            empty_after = np.count_nonzero(table == 0)
+            
+            if empty_after == empty_before:
+                return(False)
+    return(True)
+
+
+def recursiveSolve(table) -> list:
+    empty_cells = findEmptyCells(table)
+    if not empty_cells:
+        return True
+    
+    row, col = empty_cells[0]
+
+    for num in range(1,len(table)+1):
+        if isValueValidAtLocation(table, row, col, num) == True:
+            table[row,col] = num
+            if recursiveSolve(table) == True:
+                return True
+            table[row,col] = 0
+    return False
+
+
+                          
+def main():
+    attemptSolve(table)
+    if 0 in table:
+            print(tb.tabulate(table, tablefmt="grid"))
+            print("\nLogical solver stuck — finishing with backtracking...\n")
+            recursiveSolve(table)
+            
     print(tb.tabulate(table, tablefmt="grid"))
 
 
