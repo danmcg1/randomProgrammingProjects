@@ -214,6 +214,7 @@ def recursiveSolve(table) -> list:
 def main():
     attemptSolve(table)
     if 0 in table:
+            print("\nSolution reached via purely logical processes")
             print(tb.tabulate(table, tablefmt="grid"))
             print("\nLogical solver stuck — finishing with backtracking...\n")
             recursiveSolve(table)
