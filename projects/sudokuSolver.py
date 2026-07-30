@@ -4,36 +4,59 @@
  # Next work on giving it a file/photo of a sudoku puzzle and having it generate the data from it
 
 import numpy as np
+import tabulate as tb
 
+# -------------------- Easy puzzle ----------------------------
+# sudokuTable = np.array([
+#     [9,0,0,5,0,8,0,0,7],
+#     [0,8,0,3,0,2,9,0,5],
+#     [0,5,4,0,0,0,0,8,0],
+#     [0,7,0,6,8,0,0,3,2],
+#     [1,0,0,0,0,4,0,0,8],
+#     [5,0,0,2,1,9,0,6,0],
+#     [0,0,0,9,0,6,0,0,1],
+#     [7,2,6,0,0,1,0,4,0],
+#     [0,0,1,4,7,0,0,5,6],
+# ])
+
+# -------------------- Medium puzzle ----------------------------
+# sudokuTable = np.array([
+#     [2,0,3,4,0,0,0,0,5],
+#     [8,0,9,1,6,0,7,0,4],
+#     [0,0,6,0,3,0,0,1,9],
+#     [7,0,2,0,0,3,0,6,0],
+#     [0,0,8,2,5,0,0,0,0],
+#     [0,0,1,6,0,7,0,0,2],
+#     [0,0,7,0,0,5,9,2,6],
+#     [9,3,0,7,2,0,0,0,0],
+#     [6,0,0,0,9,0,4,7,0],
+# ])
+
+# -------------------- Hard puzzle ----------------------------
+# sudokuTable = np.array([
+#     [1,0,0,0,3,4,0,0,8],
+#     [0,7,0,6,8,0,0,3,0],
+#     [0,0,8,2,1,0,7,0,4],
+#     [0,5,4,0,9,0,6,8,0],
+#     [9,1,0,5,0,8,0,2,0],
+#     [0,8,0,3,0,0,0,0,5],
+#     [3,0,5,9,0,6,8,7,1],
+#     [0,0,6,0,0,0,0,4,0],
+#     [0,0,1,0,7,0,2,0,0],
+# ])
+
+# -------------------- Expert puzzle ----------------------------
 sudokuTable = np.array([
-    [9,0,0,5,0,8,0,0,7],
-    [0,8,0,3,0,2,9,0,5],
-    [0,5,4,0,0,0,0,8,0],
-    [0,7,0,6,8,0,0,3,2],
-    [1,0,0,0,0,4,0,0,8],
-    [5,0,0,2,1,9,0,6,0],
-    [0,0,0,9,0,6,0,0,1],
-    [7,2,6,0,0,1,0,4,0],
-    [0,0,1,4,7,0,0,5,6],
+    [1,5,0,0,8,2,0,0,0],
+    [3,0,0,0,7,0,0,1,0],
+    [0,0,0,0,0,0,7,5,3],
+    [0,0,0,5,2,7,6,0,9],
+    [0,0,0,0,0,0,5,0,0],
+    [0,4,0,0,6,3,8,0,7],
+    [4,0,0,0,0,8,0,0,0],
+    [7,0,3,0,4,0,1,0,0],
+    [0,0,8,6,0,0,3,0,0],
 ])
-
-rowGroup1 = sudokuTable[0:3]
-rowGroup2 = sudokuTable[3:6]
-rowGroup3 = sudokuTable[6:9]
-
-columnGroup1 = sudokuTable[:,0:3]
-columnGroup2 = sudokuTable[:,3:6]
-columnGroup3 = sudokuTable[:,6:9]
-
-zoneA1 = sudokuTable[0:3, 0:3]
-zoneA2 = sudokuTable[0:3, 3:6]
-zoneA3 = sudokuTable[0:3, 6:9]
-zoneB1 = sudokuTable[3:6, 0:3]
-zoneB2 = sudokuTable[3:6, 3:6]
-zoneB3 = sudokuTable[3:6, 6:9]
-zoneC1 = sudokuTable[6:9, 0:3]
-zoneC2 = sudokuTable[6:9, 3:6]
-zoneC3 = sudokuTable[6:9, 6:9]
 
 table = sudokuTable
 
@@ -72,7 +95,7 @@ def isValueValidAtLocation(table, row, col, value):
         return(True)
 
 
-def checkSimpleEntries(table):
+def checkSimpleExclusiveEntries(table):
     for row, col in findEmptyCells(table):
         valid_options = []
         for num in range(1, len(table)+1):
@@ -82,13 +105,18 @@ def checkSimpleEntries(table):
             table[row,col] = valid_options[0]
     return(table)
 
-
+# def checkRowGroups(table):
+#     for row, col in findEmptyCells(table):
+#         for num in range(1, len(table)+1):
 
 
 def main():
-    while 0 in table:
-        checkSimpleEntries(table)
-    print(table)
+    for i in range(len(table)):
+        checkSimpleExclusiveEntries(table)
+        if 0 not in table:
+            break
+
+    print(tb.tabulate(table,tablefmt="grid"))
 
 
 
