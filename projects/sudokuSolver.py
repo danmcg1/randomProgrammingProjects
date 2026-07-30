@@ -177,17 +177,25 @@ def attemptSolve(table) -> bool:
 
 def recursiveSolve(table) -> list:
     empty_cells = findEmptyCells(table)
+
+    # BASE CASE: If no empty cells remain puzzle is complete
     if not empty_cells:
         return True
+        
+    row, col = empty_cells[0]  # Focus only on the first empty cell
     
-    row, col = empty_cells[0]
-
-    for num in range(1,len(table)+1):
-        if isValueValidAtLocation(table, row, col, num) == True:
-            table[row,col] = num
+    for num in range(1, len(table) + 1):
+        if isValueValidAtLocation(table, row, col, num):
+            table[row, col] = num  # Step 1: Write down candidate number
+            
+            # Step 2: Pass the candidate n umber to the next "Worker"
             if recursiveSolve(table) == True:
-                return True
-            table[row,col] = 0
+                return True  # Correct. Pass 'True' up the chain.
+                
+            # Step 3: Backtrack. If the worker returned False, erase and try next num
+            table[row, col] = 0
+            
+    # If we tried 1 through 9 and none worked, return False to the previous worker
     return False
 
 
