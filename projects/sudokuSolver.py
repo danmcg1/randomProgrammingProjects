@@ -78,14 +78,23 @@ def getCurrentColGroup (table, col) -> list:
     currentColGroup = table[:,colStart : colStart + 3]
     return(currentColGroup)
 
-def getCurrentZone(table, row, col):
+def getCurrentZone(table, row, col) -> list:
     zoneRowStart = (row // 3) * 3 
     zoneColumnStart = (col // 3) * 3 
     currentZone = table[zoneRowStart : zoneRowStart + 3, zoneColumnStart : zoneColumnStart + 3]
     return(currentZone)
 
 
-def isValueValidAtLocation(table, row, col, value):
+def isValueValidAtLocation(table, row, col, value) -> bool:
+    fullRow = table[row]
+    fullCol = table[:,col]
+    fullZone = getCurrentZone(table,row,col).flatten()
+    if value in fullRow or value in fullCol or value in fullZone:
+        return(False)
+    else:
+        return(True)
+
+def isValueValidForRow(table, row, col, value) -> bool:
     fullRow = table[row]
     fullCol = table[:,col]
     fullZone = getCurrentZone(table,row,col).flatten()
@@ -95,7 +104,7 @@ def isValueValidAtLocation(table, row, col, value):
         return(True)
 
 
-def checkSimpleExclusiveEntries(table):
+def checkSimpleExclusiveEntries(table) -> list:
     for row, col in findEmptyCells(table):
         valid_options = []
         for num in range(1, len(table)+1):
@@ -105,19 +114,62 @@ def checkSimpleExclusiveEntries(table):
             table[row,col] = valid_options[0]
     return(table)
 
-# def checkRowGroups(table):
-#     for row, col in findEmptyCells(table):
-#         for num in range(1, len(table)+1):
+
+def checkHiddenSinglesInRows(table) -> list:
+    for row in range(len(table)):
+        for num in range(1, len(table) + 1):
+            possible_cols = []
+            for col in range(len(table)):
+                 if table[row, col] == 0 and isValueValidAtLocation(table, row, col, num) == 1:
+                    possible_cols.append(col)
+            if len(possible_cols) == 1:
+                table[row,possible_cols[0]] = num
+    return(table)
+
+def checkHiddenSinglesInCols(table) -> list:
+    for col in range(len(table)):
+        for num in range(1, len(table) + 1):
+            possible_rows = []
+            for row in range(len(table)):
+                if table[row, col] == 0 and isValueValidAtLocation(table, row, col, num) == 1:
+                    possible_rows.append(row)
+            if len(possible_rows) == 1:
+                table[possible_rows[0],col] = num
+    return(table)
+
+def checkHiddenSinglesInZones(table) -> list:
+    for zone_row, zone_col in range(len(table), 3):
+        for num in range(1, len(table) + 1):
+            possible_cells = []
+            
+
+
+
+
+# def main():
+#     for i in range(len(table)):
+#         checkSimpleExclusiveEntries(table)
+#         checkHiddenSinglesInRows(table)
+#         checkHiddenSinglesInCols(table)
+#         if 0 not in table:
+#             break
+
+#     print(tb.tabulate(table,tablefmt="grid"))
 
 
 def main():
-    for i in range(len(table)):
+    while 0 in table:
+        empty_before = np.count_nonzero(table == 0)
         checkSimpleExclusiveEntries(table)
-        if 0 not in table:
+        checkHiddenSinglesInRows(table)
+        checkHiddenSinglesInCols(table)
+        empty_after = np.count_nonzero(table == 0)
+        
+        if empty_after == empty_before:
+            print("Logical solver stuck — advanced strategies or guessing required.")
             break
 
-    print(tb.tabulate(table,tablefmt="grid"))
-
+    print(tb.tabulate(table, tablefmt="grid"))
 
 
 if __name__ == '__main__':
