@@ -45,6 +45,15 @@ def findEmptyCells(table) -> list:
                 emptyValues.append((row,col))
     return(emptyValues)
 
+def getCurrentRowGroup (table, row) -> list:
+    rowStart = (row // 3) * 3
+    currentRowGroup = table[rowStart : rowStart + 3]
+    return(currentRowGroup)
+
+def getCurrentColGroup (table, col) -> list:
+    colStart = (col // 3) * 3
+    currentColGroup = table[:,colStart : colStart + 3]
+    return(currentColGroup)
 
 def getCurrentZone(table, row, col):
     zoneRowStart = (row // 3) * 3 
@@ -63,15 +72,7 @@ def isValueValidAtLocation(table, row, col, value):
         return(True)
 
 
-def checkSimpleEntries(table, row, col):
-    validEntries = []
-    for n in range(1, len(table)+1):
-        if isValueValidAtLocation(table,row,col,n) == True:
-            validEntries.append((n,row,col))
-    return(validEntries)
-
-
-def checkSimpleEntries2(table):
+def checkSimpleEntries(table):
     for row, col in findEmptyCells(table):
         valid_options = []
         for num in range(1, len(table)+1):
@@ -86,7 +87,7 @@ def checkSimpleEntries2(table):
 
 def main():
 
-    print(checkSimpleEntries2(table))
+    print(checkSimpleEntries(table))
 
 
 
