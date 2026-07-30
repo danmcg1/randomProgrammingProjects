@@ -94,16 +94,6 @@ def findEmptyCells(table) -> list:
                 emptyValues.append((row,col))
     return(emptyValues)
 
-def getCurrentRowGroup (table, row) -> list:
-    rowStart = (row // 3) * 3
-    currentRowGroup = table[rowStart : rowStart + 3]
-    return(currentRowGroup)
-
-def getCurrentColGroup (table, col) -> list:
-    colStart = (col // 3) * 3
-    currentColGroup = table[:,colStart : colStart + 3]
-    return(currentColGroup)
-
 def getCurrentZone(table, row, col) -> list:
     zoneRowStart = (row // 3) * 3 
     zoneColumnStart = (col // 3) * 3 
@@ -112,15 +102,6 @@ def getCurrentZone(table, row, col) -> list:
 
 
 def isValueValidAtLocation(table, row, col, value) -> bool:
-    fullRow = table[row]
-    fullCol = table[:,col]
-    fullZone = getCurrentZone(table,row,col).flatten()
-    if value in fullRow or value in fullCol or value in fullZone:
-        return(False)
-    else:
-        return(True)
-
-def isValueValidForRow(table, row, col, value) -> bool:
     fullRow = table[row]
     fullCol = table[:,col]
     fullZone = getCurrentZone(table,row,col).flatten()
