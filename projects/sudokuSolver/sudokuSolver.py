@@ -144,7 +144,7 @@ def checkHiddenSinglesInCols(table) -> list:
                 table[possible_rows[0],col] = num
     return(table)
 
-def checkHiddenSinglesInZones(table) -> list:
+def checkHiddenSinglesInZones(table: list) -> list:
     for zone_row in range(0, len(table), 3):
         for zone_col in range(0,len(table), 3):
 
