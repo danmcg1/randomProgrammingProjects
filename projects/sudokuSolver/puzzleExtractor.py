@@ -104,59 +104,62 @@ def getCellContents(flattened_img, grid_size = 9, margin=3) -> list:
     # cv2.destroyAllWindows()
 
 def preprocess_cell(cell_img):
-    """
-    Cleans, threshold, pads, and resizes a single cell image for OCR.
-    Returns (processed_image, digit_pixel_count)
-    """
-    # 1. Convert to grayscale if BGR
     if len(cell_img.shape) == 3:
         gray = cv2.cvtColor(cell_img, cv2.COLOR_BGR2GRAY)
     else:
         gray = cell_img.copy()
 
-    # 2. Otsu thresholding: text becomes white (255), background black (0)
-    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    # 1. FIXED THRESHOLD:
+    # Digits are dark (< 100), background/blue highlights are light (> 200).
+    # Hard threshold at 140 completely deletes the blue shading.
+    _, thresh = cv2.threshold(gray, 140, 255, cv2.THRESH_BINARY_INV)
 
-    # 3. Count white (digit) pixels
-    digit_pixel_count = cv2.countNonZero(thresh)
+    # 2. DILATE: Thicken thin font lines slightly
+    kernel = np.ones((2, 2), np.uint8)
+    thresh_thick = cv2.dilate(thresh, kernel, iterations=1)
 
-    # 4. Invert back to black text on white background for EasyOCR
-    inverted = cv2.bitwise_not(thresh)
+    # 3. Count white digit pixels
+    digit_pixel_count = cv2.countNonZero(thresh_thick)
 
-    # 5. Add a 15px white border padding so EasyOCR sees a isolated character
+    # 4. Invert to black text on white background for EasyOCR
+    inverted = cv2.bitwise_not(thresh_thick)
+
+    # 5. Add generous padding (25px) around character
     padded = cv2.copyMakeBorder(
-        inverted, 15, 15, 15, 15, 
+        inverted, 25, 25, 25, 25, 
         borderType=cv2.BORDER_CONSTANT, 
         value=[255, 255, 255]
     )
 
-    # 6. Resize up to 100x100 pixels for better OCR feature extraction
-    resized = cv2.resize(padded, (100, 100), interpolation=cv2.INTER_CUBIC)
+    # 6. Upscale image to 150x150
+    resized = cv2.resize(padded, (150, 150), interpolation=cv2.INTER_CUBIC)
 
     return resized, digit_pixel_count
 
-def build_sudoku_board(cells, min_pixel_threshold=20):
+
+def build_sudoku_board(cells, min_pixel_threshold=25):
+    reader = easyocr.Reader(['en'], gpu=False)
     board = []
 
     for r in range(9):
         row_values = []
         for c in range(9):
             raw_cell = cells[r][c]
-
-            # Preprocess the cell image
             processed_cell, digit_pixels = preprocess_cell(raw_cell)
 
-            # Check if the cell is blank (thin font digits typically have 30-150 pixels)
+            # Filter out blank cells
             if digit_pixels < min_pixel_threshold:
                 row_values.append(0)
                 continue
 
-            # Run EasyOCR with character allowlist
+            # Run EasyOCR with sensitive character detection thresholds
             results = reader.readtext(
                 processed_cell, 
                 allowlist='123456789', 
-                detail=0, 
-                psm=10
+                detail=0,
+                text_threshold=0.2,  # Lowered from 0.7 to pick up thin single digits
+                low_text=0.2,        # Lowered from 0.4
+                link_threshold=0.2
             )
 
             if results:
@@ -166,8 +169,7 @@ def build_sudoku_board(cells, min_pixel_threshold=20):
 
         board.append(row_values)
 
-    return board
-        
+    return board     
 
 
 def main():
