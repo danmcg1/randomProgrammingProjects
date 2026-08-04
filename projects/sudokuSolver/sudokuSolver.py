@@ -205,7 +205,8 @@ def recursiveSolve(table) -> bool:
 def main():
     # 1. Extract the board from the image
     table = puzzleExtractor.main() 
-    
+
+    print(tb.tabulate(table, tablefmt="grid"))
     # 2. Attempt logical solving techniques first
     attemptSolve(table)
     

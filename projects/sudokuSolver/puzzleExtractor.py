@@ -103,32 +103,69 @@ def getCellContents(flattened_img, grid_size = 9, margin=3) -> list:
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
 
-def build_sudoku_board(cell_array) -> list:
-    reader = easyocr.Reader(['en'], gpu=False)
+def preprocess_cell(cell_img):
+    """
+    Cleans, threshold, pads, and resizes a single cell image for OCR.
+    Returns (processed_image, digit_pixel_count)
+    """
+    # 1. Convert to grayscale if BGR
+    if len(cell_img.shape) == 3:
+        gray = cv2.cvtColor(cell_img, cv2.COLOR_BGR2GRAY)
+    else:
+        gray = cell_img.copy()
+
+    # 2. Otsu thresholding: text becomes white (255), background black (0)
+    _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+
+    # 3. Count white (digit) pixels
+    digit_pixel_count = cv2.countNonZero(thresh)
+
+    # 4. Invert back to black text on white background for EasyOCR
+    inverted = cv2.bitwise_not(thresh)
+
+    # 5. Add a 15px white border padding so EasyOCR sees a isolated character
+    padded = cv2.copyMakeBorder(
+        inverted, 15, 15, 15, 15, 
+        borderType=cv2.BORDER_CONSTANT, 
+        value=[255, 255, 255]
+    )
+
+    # 6. Resize up to 100x100 pixels for better OCR feature extraction
+    resized = cv2.resize(padded, (100, 100), interpolation=cv2.INTER_CUBIC)
+
+    return resized, digit_pixel_count
+
+def build_sudoku_board(cells, min_pixel_threshold=20):
     board = []
+
     for r in range(9):
         row_values = []
         for c in range(9):
-            cell = cell_array[r][c]
-            
-            # 1. Check if the cell is blank
-            # (Adjust the 40 pixel threshold up/down depending on your image resolution)
-            if np.count_nonzero(cell > 100) < 40:
+            raw_cell = cells[r][c]
+
+            # Preprocess the cell image
+            processed_cell, digit_pixels = preprocess_cell(raw_cell)
+
+            # Check if the cell is blank (thin font digits typically have 30-150 pixels)
+            if digit_pixels < min_pixel_threshold:
                 row_values.append(0)
                 continue
-            
-            # 2. Run EasyOCR on non-blank cells
-            results = reader.readtext(cell, allowlist='123456789', detail=0)
-            
+
+            # Run EasyOCR with character allowlist
+            results = reader.readtext(
+                processed_cell, 
+                allowlist='123456789', 
+                detail=0, 
+                psm=10
+            )
+
             if results:
-                # Store the first recognized digit
                 row_values.append(int(results[0]))
             else:
-                # Fallback if OCR failed to find a clean digit
                 row_values.append(0)
-                
+
         board.append(row_values)
-        
+
     return board
         
 
