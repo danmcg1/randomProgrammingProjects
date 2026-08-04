@@ -169,7 +169,8 @@ def build_sudoku_board(cells, min_pixel_threshold=25):
 
         board.append(row_values)
 
-    return board     
+    return board
+        
 
 
 def main():
