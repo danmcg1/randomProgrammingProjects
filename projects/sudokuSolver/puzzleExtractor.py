@@ -135,16 +135,19 @@ def build_sudoku_board(cell_array) -> list:
 
 def main():
     img_data = imageImport()
-    img_copy = imageImport()
+    img_copy = img_data.copy()
     image_thresholded = thresholdImage(img_data)
     main_contour = getMainContour(image_thresholded)
     flattened_img = flattenImage(img_copy, main_contour)
     cell_array = getCellContents(flattened_img)
     sudoku_board = build_sudoku_board(cell_array)
 
-    print(sudoku_board)
+    return sudoku_board
 
 
 
 if __name__ == '__main__':
-    main()
+    # Running directly will extract and print the board to terminal
+    board = main()
+    for row in board:
+        print(row)

@@ -5,6 +5,7 @@
 
 import numpy as np
 import tabulate as tb
+import puzzleExtractor
 
 # -------------------- Easy puzzle ----------------------------
 # sudokuTable = np.array([
@@ -72,43 +73,44 @@ import tabulate as tb
 # ])
 
 # -------------------- Extreme puzzle ----------------------------
-sudokuTable = np.array([
-    [0,3,0,7,0,0,0,0,0],
-    [0,0,2,0,0,0,6,0,0],
-    [8,0,0,0,1,3,0,0,5],
-    [0,6,0,0,7,4,5,0,0],
-    [4,0,0,9,0,0,0,0,0],
-    [0,0,0,8,0,0,0,0,7],
-    [0,0,0,0,0,9,0,0,0],
-    [3,0,0,0,4,5,0,0,1],
-    [0,8,0,0,0,0,0,3,0],
-])
+# sudokuTable = np.array([
+#     [0,3,0,7,0,0,0,0,0],
+#     [0,0,2,0,0,0,6,0,0],
+#     [8,0,0,0,1,3,0,0,5],
+#     [0,6,0,0,7,4,5,0,0],
+#     [4,0,0,9,0,0,0,0,0],
+#     [0,0,0,8,0,0,0,0,7],
+#     [0,0,0,0,0,9,0,0,0],
+#     [3,0,0,0,4,5,0,0,1],
+#     [0,8,0,0,0,0,0,3,0],
+# ])
 
-table = sudokuTable
+# table = sudokuTable
 
 def findEmptyCells(table) -> list:
     emptyValues = []
     for row in range(len(table)):
         for col in range(len(table)):
-            if table[row, col] == 0:
+            if table[row] [col] == 0:
                 emptyValues.append((row,col))
     return(emptyValues)
 
 def getCurrentZone(table, row, col) -> list:
     zoneRowStart = (row // 3) * 3 
     zoneColumnStart = (col // 3) * 3 
-    currentZone = table[zoneRowStart : zoneRowStart + 3, zoneColumnStart : zoneColumnStart + 3]
-    return(currentZone)
+    currentZone = [
+        table[r][c]
+        for r in range(zoneRowStart, zoneRowStart + 3)
+        for c in range(zoneColumnStart, zoneColumnStart + 3)
+    ]
+    return currentZone
 
 
 def isValueValidAtLocation(table, row, col, value) -> bool:
     fullRow = table[row]
-    fullCol = table[:,col]
-    fullZone = getCurrentZone(table,row,col).flatten()
-    if value in fullRow or value in fullCol or value in fullZone:
-        return(False)
-    else:
-        return(True)
+    fullCol = [table[r][col] for r in range(len(table))]
+    fullZone = getCurrentZone(table,row,col)
+    return value not in fullRow and value not in fullCol and value not in fullZone
 
 
 def checkSimpleExclusiveEntries(table) -> list:
@@ -175,41 +177,47 @@ def attemptSolve(table) -> bool:
     return(True)
 
 
-def recursiveSolve(table) -> list:
+def recursiveSolve(table) -> bool:
     empty_cells = findEmptyCells(table)
 
-    # BASE CASE: If no empty cells remain puzzle is complete
+    # BASE CASE: If no empty cells remain, the puzzle is complete
     if not empty_cells:
         return True
         
-    row, col = empty_cells[0]  # Focus only on the first empty cell
+    row, col = empty_cells[0]  # Focus on the first empty cell
     
     for num in range(1, len(table) + 1):
         if isValueValidAtLocation(table, row, col, num):
-            table[row, col] = num  # Step 1: Write down candidate number
+            table[row][col] = num  # Step 1: Place candidate number
             
-            # Step 2: Pass the candidate n umber to the next "Worker"
-            if recursiveSolve(table) == True:
-                return True  # Correct. Pass 'True' up the chain.
+            # Step 2: Recurse to solve the rest of the board
+            if recursiveSolve(table):
+                return True  # Solution found!
                 
-            # Step 3: Backtrack. If the worker returned False, erase and try next num
-            table[row, col] = 0
+            # Step 3: Backtrack (reset cell using list indexing)
+            table[row][col] = 0
             
-    # If we tried 1 through 9 and none worked, return False to the previous worker
+    # Tried 1 through 9 and none worked -> trigger backtrack in caller
     return False
 
 
                           
 def main():
+    # 1. Extract the board from the image
+    table = puzzleExtractor.main() 
+    
+    # 2. Attempt logical solving techniques first
     attemptSolve(table)
-    if 0 in table:
-            print("\nSolution reached via purely logical processes")
-            print(tb.tabulate(table, tablefmt="grid"))
-            print("\nLogical solver stuck — finishing with recursive backtracking...\n")
-            recursiveSolve(table)
+    
+    # 3. If zeros remain, fall back to recursive backtracking
+    if any(0 in row for row in table):
+        print("\nLogical solver stuck — finishing with recursive backtracking...\n")
+        recursiveSolve(table)
+    else:
+        print("\nSolution reached via purely logical processes!")
             
+    # 4. Display the solved grid
     print(tb.tabulate(table, tablefmt="grid"))
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
