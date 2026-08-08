@@ -14,7 +14,7 @@ class additionCell:
 
     def __repr__(self):
             # Returns a placeholder string when printed
-            return " . "  # or "   " for a blank space
+            return " + "  # or "   " for a blank space
 
 
 # -------------------- Waffle puzzle ----------------------------
