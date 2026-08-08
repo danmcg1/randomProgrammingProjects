@@ -12,17 +12,21 @@ class additionCell:
         self.cell1 = cell1
         self.cell2 = cell2
 
+    def __repr__(self):
+            # Returns a placeholder string when printed
+            return " . "  # or "   " for a blank space
+
 
 # -------------------- Waffle puzzle ----------------------------
-numberWafflePuzzle = np.array([
-    [0,0,4,0,1,0,0],
-    [0,3,0,7,0,8,0],
-    [7,0,3,2,6,0,5],
-    [0,11,0,8,0,5,0],
-    [2,0,1,7,3,0,4],
-    [0,12,0,10,0,8,0],
-    [0,0,7,0,2,0,0],
-])
+# numberWafflePuzzle = np.array([
+#     [0,0,4,0,1,0,0],
+#     [0,3,0,7,0,8,0],
+#     [7,0,3,2,6,0,5],
+#     [0,11,0,8,0,5,0],
+#     [2,0,1,7,3,0,4],
+#     [0,12,0,10,0,8,0],
+#     [0,0,7,0,2,0,0],
+# ])
 
 rel = {
     "u": (-1,0),
@@ -32,19 +36,31 @@ rel = {
 }
 
 numberWafflePuzzle = np.array([
-    [0,0,4,0,1,0,0],
-    [0,additionCell(3, rel["u"], rel["l"]),0,additionCell(7, rel["u"], rel["l"]),0,additionCell(8, rel["u"], rel["r"]),0],
-    [7,0,3,2,6,0,5],
-    [0,additionCell(11, rel["l"], rel["d"]),0,additionCell(8, rel["l"], rel["u"]),0,additionCell(5, rel["u"], rel["l"]),0],
-    [2,0,1,7,3,0,4],
-    [0,additionCell(12, rel["d"], rel["l"]),0,additionCell(10, rel["d"], rel["l"]),0,additionCell(8, rel["d"], rel["r"]),0],
-    [0,0,7,0,2,0,0],
+    [4,0,3,0,7,0,0],
+    [0,additionCell(7, rel["d"], rel["l"]),0,additionCell(9, rel["u"], rel["l"]),0,additionCell(7, rel["u"], rel["l"]),0],
+    [1,0,6,0,3,0,7],
+    [0,additionCell(7, rel["r"], rel["d"]),0,additionCell(6, rel["u"], rel["r"]),0,additionCell(8, rel["r"], rel["d"]),0],
+    [7,0,1,0,5,0,3],
+    [0,additionCell(5, rel["l"], rel["d"]),0,additionCell(8, rel["u"], rel["l"]),0,additionCell(7, rel["d"], rel["l"]),0],
+    [0,0,2,0,4,0,0],
 ])
 
-
-
-
 table = numberWafflePuzzle.copy()
+
+def extractAdditionCells(table) -> list:
+    constraintCells = []
+    
+    for row in range(1, len(table), 2):
+        for col in range(1, len(table), 2):
+            cell = table[row, col]
+            
+            coord1 = (row + cell.cell1[0], col + cell.cell1[1])
+            coord2 = (row + cell.cell2[0], col + cell.cell2[1])
+            
+            constraintCells.append((cell.total, coord1, coord2))
+            
+    return constraintCells
+
 
 def findEmptyCells(table) -> list:
     emptyValues = []
@@ -56,9 +72,16 @@ def findEmptyCells(table) -> list:
 
 
 def isValueValidAtLocation(table, row, col, value) -> bool:
-    fullRow = table[row]
-    fullCol = [table[r][col] for r in range(len(table))]
-    return value not in fullRow and value not in fullCol
+    if row % 2 == 0:
+        if value in table[row]:
+            return False
+
+    if col % 2 == 0:
+        column_vals = [table[r][col] for r in range(len(table))]
+        if value in column_vals:
+            return False
+
+    return True
 
 
 def checkSimpleExclusiveEntries(table) -> list:
@@ -71,92 +94,60 @@ def checkSimpleExclusiveEntries(table) -> list:
             table[row,col] = valid_options[0]
     return(table)         
 
-def checkAddition(table, sum, coord1, coord2) -> bool:
-    if table(coord1) + table(coord2) == sum:
-        return True
-    else:
-        return False
+
+def check_addition_constraint(table, constraint) -> bool:
+    sum, coord1, coord2 = constraint
+    val1 = table[coord1]
+    val2 = table[coord2]
     
+    if val1 != 0 and val2 != 0:
+        return (val1 + val2) == sum
+        
+    return True  
+
+def are_all_additions_valid(table, constraints) -> bool:
+    for constraint in constraints:
+        if not check_addition_constraint(table, constraint):
+            return False
+    return True
 
 
-def checkHiddenSinglesInRows(table) -> list:
-    for row in range(len(table)):
-        for num in range(1, len(table) + 1):
-            possible_cols = []
-            for col in range(len(table)):
-                 if table[row, col] == 0 and isValueValidAtLocation(table, row, col, num) == 1:
-                    possible_cols.append(col)
-            if len(possible_cols) == 1:
-                table[row,possible_cols[0]] = num
-    return(table)
 
-def checkHiddenSinglesInCols(table) -> list:
-    for col in range(len(table)):
-        for num in range(1, len(table) + 1):
-            possible_rows = []
-            for row in range(len(table)):
-                if table[row, col] == 0 and isValueValidAtLocation(table, row, col, num) == 1:
-                    possible_rows.append(row)
-            if len(possible_rows) == 1:
-                table[possible_rows[0],col] = num
-    return(table)
-
-
-def attemptSolve(table) -> bool:
-    while 0 in table:
-            empty_before = np.count_nonzero(table == 0)
-            checkSimpleExclusiveEntries(table)
-            # checkHiddenSinglesInRows(table)
-            # checkHiddenSinglesInCols(table)
-            empty_after = np.count_nonzero(table == 0)
-            
-            if empty_after == empty_before:
-                return(False)
-    return(True)
-
-
-def recursiveSolve(table) -> bool:
+def recursiveSolve(table, constraints) -> bool:
     empty_cells = findEmptyCells(table)
 
-    # BASE CASE: If no empty cells remain, the puzzle is complete
     if not empty_cells:
         return True
         
-    row, col = empty_cells[0]  # Focus on the first empty cell
+    row, col = empty_cells[0] 
     
     for num in range(1, len(table) + 1):
         if isValueValidAtLocation(table, row, col, num):
-            table[row][col] = num  # Step 1: Place candidate number
+            table[row, col] = num
+            if not are_all_additions_valid(table, constraints):
+                pass
             
-            # Step 2: Recurse to solve the rest of the board
-            if recursiveSolve(table):
-                return True  # Solution found!
-                
-            # Step 3: Backtrack (reset cell using list indexing)
-            table[row][col] = 0
+            if are_all_additions_valid(table, constraints):
+                if recursiveSolve(table, constraints):
+                    return True  
+                    
+            table[row, col] = 0
             
-    # Tried 1 through 9 and none worked -> trigger backtrack in caller
-    return False
+    return False  
 
 
                           
 def main():
+    constraintCells = extractAdditionCells(table)
 
+    print("--- Starting Board ---")
     print(tb.tabulate(table, tablefmt="grid"))
     print("\n")
-
-    for i in range(5):
-        attemptSolve(table)
-
-    print(tb.tabulate(table, tablefmt="grid"))
-    
-    # if any(0 in row for row in table):
-    #     print("\nLogical solver stuck — finishing with recursive backtracking...\n")
-    #     recursiveSolve(table)
-    # else:
-    #     print("\nSolution reached via purely logical processes!")
+   
+    recursiveSolve(table, constraintCells)
             
-    # print(tb.tabulate(table, tablefmt="grid"))
+    print("--- Ending Board ---")
+    print(tb.tabulate(table, tablefmt="grid"))
 
 if __name__ == "__main__":
     main()
