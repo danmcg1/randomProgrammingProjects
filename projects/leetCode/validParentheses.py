@@ -8,61 +8,45 @@
 # Every close bracket has a corresponding open bracket of the same type.
 
 
-bracketPairs = {
-    '(': ')',
-    '{': '}',
-    '[': ']'
-}
 
-brackets = [item for pair in bracketPairs.items() for item in pair]
+s = '(])'
 
+class Solution(object):
+    def isValid(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        bracketBuffer = []
+        try:
+            for i in s:
+                if i == '(':
+                    bracketBuffer.append(i)
+                elif i == '{':
+                    bracketBuffer.append(i)
+                elif i == '[':
+                    bracketBuffer.append(i)
 
+                elif i == ')' and bracketBuffer[-1] == '(':
+                    del bracketBuffer[-1]
+                elif i == '}' and bracketBuffer[-1] == '{':
+                    del bracketBuffer[-1]
+                elif i == ']' and bracketBuffer[-1] == '[':
+                    del bracketBuffer[-1]
 
-def userInput() -> str:
-    value = '[](h{e[l]l}o)'
-    # value = input(f'Add a string with parentheses: ')
-    return value
+                elif i == ')' and bracketBuffer[-1] != ')':
+                    return(False)
+                elif i == '}' and bracketBuffer[-1] != '{':
+                    return(False)
+                elif i == ']' and bracketBuffer[-1] != '[':
+                    return(False)
 
+        except:
+            return(False)
+        if bracketBuffer == []:
+            return(True)
+        else:
+            return(False)
 
-
-def bracketCheck(bracketsInString: list) -> list:
-    bracketBuffer = []
-    try:
-        for i in bracketsInString:
-            if i == '(':
-                bracketBuffer.append(i)
-            if i == '{':
-                bracketBuffer.append(i)
-            if i == '[':
-                bracketBuffer.append(i)
-            if i == ')':
-                bracketBuffer.remove('(')
-            if i == '}':
-                bracketBuffer.remove('{')
-            if i == ']':
-                bracketBuffer.remove('[')
-    except:
-        return(False)
-    if bracketBuffer == []:
-        return(True)
-    else:
-        return(False)
-
-
-def removePairedBracket(input: str) -> bool:
-    if input == '(':
-        return(True)
-    elif input == '{':
-        return(True)
-    elif input == '[':
-        return(True)
-    else:
-        return(False)
-
-def main():
-    input = userInput()
-    print(bracketCheck(input))
-    
-
-if __name__ == '__main__':
-    main()
+solver = Solution()
+print(solver.isValid(s))
