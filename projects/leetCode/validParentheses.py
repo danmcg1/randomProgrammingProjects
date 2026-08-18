@@ -19,23 +19,49 @@ brackets = [item for pair in bracketPairs.items() for item in pair]
 
 
 def userInput() -> str:
-    value = '[{}](h{e[l]l}o)'
+    value = '[](h{e[l]l}o)'
     # value = input(f'Add a string with parentheses: ')
     return value
 
 
 
-def getBracketsFromString(stringDict: dict) -> dict:
-    allowedKeys = set(brackets)
-    filteredDict = [k for k in stringDict if k in allowedKeys]
-    return filteredDict
+def bracketCheck(bracketsInString: list) -> list:
+    bracketBuffer = []
+    try:
+        for i in bracketsInString:
+            if i == '(':
+                bracketBuffer.append(i)
+            if i == '{':
+                bracketBuffer.append(i)
+            if i == '[':
+                bracketBuffer.append(i)
+            if i == ')':
+                bracketBuffer.remove('(')
+            if i == '}':
+                bracketBuffer.remove('{')
+            if i == ']':
+                bracketBuffer.remove('[')
+    except:
+        return(False)
+    if bracketBuffer == []:
+        return(True)
+    else:
+        return(False)
 
 
-
+def removePairedBracket(input: str) -> bool:
+    if input == '(':
+        return(True)
+    elif input == '{':
+        return(True)
+    elif input == '[':
+        return(True)
+    else:
+        return(False)
 
 def main():
     input = userInput()
-    print (getBracketsFromString(input))
+    print(bracketCheck(input))
     
 
 if __name__ == '__main__':
