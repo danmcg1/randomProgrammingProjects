@@ -6,37 +6,36 @@
 # Open brackets must be closed by the same type of brackets.
 # Open brackets must be closed in the correct order.
 # Every close bracket has a corresponding open bracket of the same type.
-brackets = ['(','{','[',']','}',')']
-openingBrackets = ['(','{','[']
-closingBrackets = [')','}',']']
-bracketsInString = {}
+
+
+bracketPairs = {
+    '(': ')',
+    '{': '}',
+    '[': ']'
+}
+
+brackets = [item for pair in bracketPairs.items() for item in pair]
+
+
 
 def userInput() -> str:
-    value = input(f'Add a string with parentheses: ')
+    value = '[{}](h{e[l]l}o)'
+    # value = input(f'Add a string with parentheses: ')
     return value
 
 
-def enumerateInput(input) -> dict:
-    for location, letter in enumerate(list(input)):
-        bracketsInString.update({letter: location})
-    return bracketsInString
 
-
-
-
-def onlyBracketsFromString(stringDict: dict) -> dict:
+def getBracketsFromString(stringDict: dict) -> dict:
     allowedKeys = set(brackets)
-    filteredDict = {k: v for k,v in stringDict.items() if k in allowedKeys}
+    filteredDict = [k for k in stringDict if k in allowedKeys]
     return filteredDict
 
-def getBracketLocations(input: str) -> dict:
-    return onlyBracketsFromString(enumerateInput(input))
 
 
 
 def main():
     input = userInput()
-    print (getBracketLocations(input))
+    print (getBracketsFromString(input))
     
 
 if __name__ == '__main__':
