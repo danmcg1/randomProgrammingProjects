@@ -9,7 +9,7 @@
 
 
 
-s = '(])'
+s = '({[{(())}]})'
 
 class Solution(object):
     def isValid(self, s):
@@ -34,12 +34,15 @@ class Solution(object):
                 elif i == ']' and bracketBuffer[-1] == '[':
                     del bracketBuffer[-1]
 
-                elif i == ')' and bracketBuffer[-1] != ')':
+                elif i == ')' and bracketBuffer[-1] != '(':
                     return(False)
                 elif i == '}' and bracketBuffer[-1] != '{':
                     return(False)
                 elif i == ']' and bracketBuffer[-1] != '[':
                     return(False)
+
+                elif bracketBuffer == []:
+                    return False
 
         except:
             return(False)
