@@ -1,8 +1,9 @@
 
-# Check whether a word is a palindrome with True or False being returned
-
 
 def wordsInString(string):
+    words = len(string.split())
+    return words
+    
     
 
 def main():
