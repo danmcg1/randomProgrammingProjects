@@ -3,6 +3,12 @@
 # If there is no common prefix, return an empty string "".
 
 strs = ["flower","flow","float"]
+strs = [""]
+
+def singleEnum(list):
+    enum = []
+    enum += enumerate(list)
+    return enum
 
 class Solution(object):
     def longestCommonPrefix(self, strs):
@@ -10,8 +16,20 @@ class Solution(object):
         :type strs: List[str]
         :rtype: str
         """
+        prefix = ""
+        if not strs:
+            return ""
 
+        enum = singleEnum(strs[0])
+        for i, char in enum:
+            for word in strs:
+                if i >= len(word) or word[i] != char:
+                    return prefix
+            prefix += char
+        return prefix
+
+
+   
 
 answer = Solution()
-
-print(answer.isPalindrome(x))
+print(answer.longestCommonPrefix(strs))
