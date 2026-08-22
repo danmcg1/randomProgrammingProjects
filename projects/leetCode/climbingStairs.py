@@ -18,7 +18,7 @@
 # [1,2,1,1]
 # [2,1,1,1]
 
-n = 45
+n = 38
 
 numbers = [1,1]
 
@@ -28,17 +28,13 @@ class Solution(object):
         :type n: int
         :rtype: int
         """
-        if n == 0:
-            return(0)
-        elif n == 1:
-            return(1)
-        elif n == 2:
-            return(2)
-        else:
-            for i in range(1,n):
-                new_number = numbers[i-1]+numbers[i]
-                numbers.append(new_number)
-            return(numbers[-1])
+        if n <= 2:
+            return n
+    
+        prev, curr = 1, 2
+        for _ in range(3, n + 1):
+            prev, curr = curr, prev + curr
+        return(curr)
 
 answer = Solution()
 
