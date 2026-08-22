@@ -30,7 +30,7 @@ class Solution(object):
 
 
 answer = Solution()
-print(answer.longestCommonPrefix(strs))
+#print(answer.longestCommonPrefix(strs))
 
 
 
@@ -50,3 +50,4 @@ def mostEfficientSolution(strs):
             return ""
 
     return prefix
+
