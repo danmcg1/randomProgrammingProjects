@@ -3,9 +3,7 @@
 
 # You must not use any built-in exponent function or operator.
 
-x = 2147395599
-
-x = int(x)
+x = 4
 
 class Solution(object):
     def mySqrt(self, x):
@@ -13,18 +11,16 @@ class Solution(object):
         :type x: int
         :rtype: int
         """
-        root = 0
+        r = 0
         if x < 0:
-            root = 0
+            r = 0
         elif x == 1:
-            root = 1 
+            r = 1
         else:
-            for n in range(1, x):
-                if (n * n) <= x:
-                    root = n
-                elif (n * n) > x:
-                    break
-        return root
+            r = x//2
+            while r * r > x:
+                r = (r + (x//r)) // 2 
+        return r
 
 answer = Solution()
 
