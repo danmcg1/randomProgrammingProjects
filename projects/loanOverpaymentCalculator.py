@@ -28,7 +28,7 @@ def interest_rate_in_period(loan_dict):
         return (interest_rate_percentage_conversion(loan_dict) / 52) 
     elif interest_interval == "daily":
         return (interest_rate_percentage_conversion(loan_dict) / 365) 
-    return(0)
+    return(n)
 
 def number_of_periods(loan_dict: dict):
     if interest_interval == "yearly":
@@ -39,7 +39,7 @@ def number_of_periods(loan_dict: dict):
         n =  loan_dict["loan_term"]  * 52
     elif interest_interval == "daily":
         n =  loan_dict["loan_term"]  * 365
-    return(0)
+    return(n)
 
 historic_payments = []
 
