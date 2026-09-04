@@ -6,7 +6,20 @@
 #         self.val = val
 #         self.next = next
 
-head = [1,1,2,3,3]
+
+
+class ListNode(object):
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+    def __repr__(self):
+        nodes = []
+        current = self
+        while current:
+            nodes.append(str(current.val))
+            current = current.next
+        return " -> ".join(nodes)
 
 
 class Solution(object):
@@ -15,15 +28,38 @@ class Solution(object):
         :type head: Optional[ListNode]
         :rtype: Optional[ListNode]
         """
-        k = 1
-                
-        for i in range(1, len(head)):
-            if head[i] != head[i-1]:
-                head[k] = head[i]
-                k += 1
-    
-        return(head[0:k])
+        current = head
+        while current is not None and current.next is not None:
+            if current.val == current.next.val:
+                # Bypass the duplicate node (DO NOT move current forward yet!)
+                current.next = current.next.next
+            else:
+                # Only move forward if the next value is different
+                current = current.next
+
+        return head
+
+
+    def createNodes(self, values): 
+        if not values:
+            return None
+        head = ListNode(values[0])
+        current = head
+
+        for val in values[1:]:
+            current.next = ListNode(val)
+            current = current.next
+        return head
+
+    def printNodes(self, head):
+        elements = []
+        current = head
+        while current:
+            elements.append(str(current.val))
+            current = current.next
+        print(" -> ".join(elements))
 
 answer = Solution()
 
+head = answer.createNodes([1,1,2,3,3])
 print(answer.deleteDuplicates(head))
