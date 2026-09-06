@@ -17,7 +17,7 @@
 # Output: false
 
 p = [1,2,1]
-q = [1,1,2]
+q = [1,2,1]
 
 # Definition for a binary tree node.
 class TreeNode(object):
@@ -58,14 +58,11 @@ class Solution(object):
         if not p or not q or p.val != q.val:
             return False
 
-       # return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+        return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
 
 answer = Solution()
 
 p_tree = buildTree(p)
 q_tree = buildTree(q)
-
-print(p_tree)
-print(q_tree)
 
 print(answer.isSameTree(p_tree,q_tree))
