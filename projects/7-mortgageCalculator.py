@@ -48,7 +48,8 @@ def get_interest_interval() -> str:
     print('You picked: ' + interest_interval)
     return(interest_interval)
 
-interest_interval = get_interest_interval()
+#interest_interval = get_interest_interval()
+interest_interval = "monthly"
 
 
 def period_constants(mortgage_dict: dict, interest_interval: str):
@@ -193,7 +194,7 @@ def all_calculations_with_overpayments(overpayment):
             break
         if overpayment > 0:
             print(f"Year {period // 12} Month {(period % 12) +1} | Remaining Owed: £{combined_remaining_balance:10.2f} | Combined Interest: £{combined_interest_this_period:7.2f} |")
-    print(f"\n| Initial Principle: £{combined_total_owed:,.2f} | Bill per period: £{(combined_periodic_payment + overpayment):,.2f}\n ")
+    print(f"\n| Initial Principle: £{combined_total_owed:,.2f} | Bill per period: £{combined_periodic_payment:,.2f} + £{overpayment:} = £{combined_periodic_payment + overpayment:,.2f}\n")
 
     totals = {
     "total_interest_paid": total_interest_paid,
@@ -204,7 +205,7 @@ def all_calculations_with_overpayments(overpayment):
 
 
 def main():
-    overpayment = 50
+    overpayment = 200
 
     results = all_calculations(overpayment)
     total_payment = results["total_interest_paid"] + results["total_principle_paid"]
