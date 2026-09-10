@@ -82,6 +82,7 @@ def all_calculations(overpayment):
     combined_periodic_payment = 0.0
     total_interest_paid = 0.0
     total_principle_paid = 0.0
+    total_periods = 0
 
     for mortgage in my_mortgages:
         mortgage["current_balance"] = starting_balance(mortgage)
@@ -120,17 +121,19 @@ def all_calculations(overpayment):
             })
             total_interest_paid += combined_interest_this_period
             total_principle_paid += combined_principle_paid_this_period
+            total_periods = period
 
         if combined_remaining_balance <= 0:
             break
         if overpayment <= 0:
             print(f"Year {period // 12} Month {(period % 12) +1} | Remaining Owed: £{combined_remaining_balance:10.2f} | Combined Interest: £{combined_interest_this_period:7.2f} |")
-    print(f"| Initial Total Owed: £{combined_total_owed:,.2f} | Bill per period: £{combined_periodic_payment:,.2f}\n ")
+    print(f"\n| Initial Principle: £{combined_total_owed:,.2f} | Bill per period: £{combined_periodic_payment:,.2f}\n ")
 
 
     totals = {
     "total_interest_paid": total_interest_paid,
-    "total_principle_paid": total_principle_paid
+    "total_principle_paid": total_principle_paid,
+    "total_periods": total_periods
               }
     return totals
 
@@ -143,6 +146,8 @@ def all_calculations_with_overpayments(overpayment):
     combined_periodic_payment = 0.0
     total_interest_paid = 0.0
     total_principle_paid = 0.0
+    total_periods = 0
+
 
     for mortgage in my_mortgages:
         mortgage["current_balance"] = starting_balance(mortgage)
@@ -181,22 +186,25 @@ def all_calculations_with_overpayments(overpayment):
             })
             total_interest_paid += combined_interest_this_period
             total_principle_paid += combined_principle_paid_this_period
+            total_periods = period
+
 
         if combined_remaining_balance <= 0:
             break
         if overpayment > 0:
             print(f"Year {period // 12} Month {(period % 12) +1} | Remaining Owed: £{combined_remaining_balance:10.2f} | Combined Interest: £{combined_interest_this_period:7.2f} |")
-    print(f"| Initial Total Owed: £{combined_total_owed:,.2f} | Bill per period: £{(combined_periodic_payment + overpayment):,.2f}\n ")
+    print(f"\n| Initial Principle: £{combined_total_owed:,.2f} | Bill per period: £{(combined_periodic_payment + overpayment):,.2f}\n ")
 
     totals = {
     "total_interest_paid": total_interest_paid,
-    "total_principle_paid": total_principle_paid
+    "total_principle_paid": total_principle_paid,
+    "total_periods": total_periods
               }
     return totals
 
 
 def main():
-    overpayment = 0
+    overpayment = 50
 
     results = all_calculations(overpayment)
     total_payment = results["total_interest_paid"] + results["total_principle_paid"]
@@ -206,9 +214,10 @@ def main():
         total_payment_with_overpayment = results_with_overpayment["total_interest_paid"] + results_with_overpayment["total_principle_paid"]
         
         interest_saved = results["total_interest_paid"] - results_with_overpayment["total_interest_paid"]
-        print(f"| Interest saved with overpayments: £{interest_saved:,.2f}")
-        print(f"| Total payment: £{total_payment:,.2f} ")
-        print(f"| Total paid with overpayments: £{total_payment_with_overpayment:,.2f}")
+        period_reduction = results["total_periods"] - results_with_overpayment["total_periods"]
+        print(f"| Interest saved with overpayment: £{interest_saved:,.2f}")
+        print(f"| New mortgage term: {(results_with_overpayment["total_periods"]) // 12} Years {((results_with_overpayment["total_periods"]) % 12) +1} Months| Time removed: {period_reduction // 12} Years {(period_reduction % 12) +1} Months")
+        print(f"\n| Total without overpayment: £{total_payment:,.2f} | Total with overpayment: £{total_payment_with_overpayment:,.2f}")
         
 if __name__ == '__main__':
     main()
