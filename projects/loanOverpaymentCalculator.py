@@ -4,12 +4,12 @@
 
 ### ------------------------------- Loan information ----------------------------
 loan_1 = {
-    "loan_term": 5,
-    "interest_rate": 4.5,
-    "principle": 18000,
+    "loan_term": 35,
+    "interest_rate": 5,
+    "principle": 350_000,
 }
 
-overpayments: int = 100
+overpayments: int = 300
 
 #["yearly","monthly","weekly","daily"]
 interest_interval = "monthly" 
@@ -51,7 +51,7 @@ for loan in loans:
     n = number_of_periods(loan)
     current_balance = loan_1["principle"]
     periodic_payment = loan_1["principle"] * ((r * pow(1 + r, n)) / (pow(1 + r, n) - 1))
-    print(f"Total Owed: £{loan["principle"]:.2f}| {interest_interval} overpayment: £{overpayments:.2f} | Bill for period: £{periodic_payment}")
+    
 
     period = 1
     while current_balance > 0:
@@ -66,10 +66,12 @@ for loan in loans:
             "current_balance": current_balance,
         })
 
-        print(f"Month {period}: Start: £{current_balance:.2f} | Interest: £{interest_over_period:.2f} | End: £{ending_balance:.2f}")
+        print(f"Year {period // 12} Month {(period % 12) +1}: Start: £{current_balance:,.2f} | Interest: £{interest_over_period:.2f} | End: £{ending_balance:.2f}")
+        
         
         current_balance = ending_balance
         period += 1
+    print(f"\nTotal Owed: £{loan["principle"]:,}| {interest_interval.capitalize()} overpayment: £{overpayments:,} | Bill per period: £{periodic_payment:,.2f}")
 
 
 
